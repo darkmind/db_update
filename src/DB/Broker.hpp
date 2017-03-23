@@ -6,9 +6,11 @@
 
 using namespace std;
 
-namespace broker {
+namespace broker
+{
 
-class Broker {
+class Broker
+{
 public:
     MYSQL_RES* execute(string statement);
 
