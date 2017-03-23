@@ -1,56 +1,16 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-
 #include <iostream>
 #include <sstream>
 #include <mysql.h>
+#include "DB/Broker.hpp"
+
 #include <boost/program_options.hpp>
 
 using namespace std;
 namespace po = boost::program_options;
-
-class Broker {
-        MYSQL *connection, mysql;
-        MYSQL_RES *result;
-        MYSQL_ROW row;
-
-        int query_state;
-    public:
-        MYSQL_RES* execute(string statement) {
-            query_state = mysql_query(connection, statement.c_str());
-            if ( query_state != 0 )  {
-                std::ostringstream out;
-                out << "Query preparation failed: " << mysql_error(connection);
-                throw runtime_error(out.str());
-            }
-
-            result = mysql_store_result(connection);
-            if ( result == 0 )  {
-                std::ostringstream out;
-                out << "Query run failed: " << mysql_error(connection);
-                throw runtime_error(out.str());
-            }
-
-            return result;
-        }
-
-        void connect( string host, string m_socket, string db, string user, string password ) {
-            mysql_init(&mysql);
-
-            connection = mysql_real_connect(&mysql, host.c_str(), user.c_str(), password.c_str(),
-                db.c_str(), 3306, m_socket.c_str(), 0);
-            if ( connection == 0 ) {
-                std::ostringstream out;
-                out << "Can't connect to db: " << mysql_error(connection);
-                throw runtime_error(out.str());
-            }
-        }
-
-        ~Broker () {
-            mysql_close(connection);
-        }
-};
+using namespace broker;
 
 int main(int ac, char* av[]) {
     po::options_description desc("Allowed options");
