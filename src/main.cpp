@@ -2,9 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <iostream>
-#include <sstream>
 #include <mysql.h>
-#include "DB/Broker.hpp"
+#include <DB/Broker.hpp>
 
 #include <boost/program_options.hpp>
 
