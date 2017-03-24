@@ -1,11 +1,13 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include <iostream>
-#include <mysql.h>
+#include <Core.hpp>
 #include <DB/Broker.hpp>
-
 #include <boost/program_options.hpp>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 namespace po = boost::program_options;
@@ -14,15 +16,13 @@ using namespace broker;
 int main(int ac, char* av[])
 {
     po::options_description desc("Allowed options");
-    desc.add_options()
-    ("help", "produce help message")
-    ("host",   po::value< string >()->default_value("localhost"), "hostname to connect")
-    ("socket", po::value< string >()->default_value("/tmp/mysql.sock"), "socket to connect")
-    ("db",     po::value< string >()->default_value("test"), "name of the schema")
-    ("user",   po::value< string >()->default_value("root"), "db user")
-    ("pass",   po::value< string >()->default_value(""), "db password")
-    ("query",  po::value< string >()->default_value("select 1 from dual"), "query to run")
-    ;
+    desc.add_options()("help", "produce help message")
+        ("host", po::value<string>()->default_value("localhost"), "hostname to connect")
+        ("socket", po::value<string>()->default_value("/tmp/mysql.sock"), "socket to connect")
+        ("db", po::value<string>()->default_value("test"), "name of the schema")
+        ("user", po::value<string>()->default_value("root"), "db user")
+        ("pass", po::value<string>()->default_value(""), "db password")
+        ("query", po::value<string>()->default_value("select 1 from dual"), "query to run");
     po::variables_map vm;
     try {
         po::store(po::parse_command_line(ac, av, desc), vm);
@@ -33,28 +33,23 @@ int main(int ac, char* av[])
     }
     po::notify(vm);
 
-    if (vm.count("help")) {
+    if(vm.count("help")) {
         cout << desc << endl;
         return 1;
     }
 
-    Broker* broker = new Broker();
-    broker->connect( vm["host"].as<string>(), vm["socket"].as<string>(), vm["db"].as<string>(),
-                     vm["user"].as<string>(), vm["pass"].as<string>() );
+    map<string, string> options = {
+        {"host", vm["host"].as<string>()}, {"user", vm["user"].as<string>()},
+        {"pass", vm["pass"].as<string>()}, {"socket", vm["socket"].as<string>()},
+        {"db", vm["db"].as<string>()},
+    };
 
-    MYSQL_ROW row;
-    MYSQL_RES* result;
-    result = broker->execute( vm["query"].as<string>() );
-    unsigned int c_num = mysql_num_fields(result);
-    while ( (row = mysql_fetch_row(result)) != NULL) {
-        for ( unsigned int i = 0; i < (c_num - 1); i++ ) {
-            if ( row[i] == NULL ) {
-                cout << "NULL ";
-            } else {
-                cout << row[i] << " ";
-            }
+    core::Core* core = new core::Core(options);
+    vector<vector<string>> records = core->execute(vm["query"].as<string>());
+    for(auto& row : records) {
+        for(auto& val : row) {
+            cout << "'" << val << "' ";
         }
         cout << endl;
     }
-    mysql_free_result(result);
 }
