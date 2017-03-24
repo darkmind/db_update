@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <Core.hpp>
-#include <DB/Broker.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
@@ -11,14 +10,13 @@
 
 using namespace std;
 namespace po = boost::program_options;
-using namespace broker;
+using namespace core;
 
 int main(int ac, char* av[])
 {
     po::options_description desc("Allowed options");
     desc.add_options()("help", "produce help message")
         ("host", po::value<string>()->default_value("localhost"), "hostname to connect")
-        ("socket", po::value<string>()->default_value("/tmp/mysql.sock"), "socket to connect")
         ("db", po::value<string>()->default_value("test"), "name of the schema")
         ("user", po::value<string>()->default_value("root"), "db user")
         ("pass", po::value<string>()->default_value(""), "db password")
@@ -40,11 +38,11 @@ int main(int ac, char* av[])
 
     map<string, string> options = {
         {"host", vm["host"].as<string>()}, {"user", vm["user"].as<string>()},
-        {"pass", vm["pass"].as<string>()}, {"socket", vm["socket"].as<string>()},
+        {"pass", vm["pass"].as<string>()},
         {"db", vm["db"].as<string>()},
     };
 
-    core::Core* core = new core::Core(options);
+    Core* core = new Core(options);
     vector<vector<string>> records = core->execute(vm["query"].as<string>());
     for(auto& row : records) {
         for(auto& val : row) {

@@ -2,25 +2,38 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #pragma once
-#include <mysql.h>
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <vector>
+#include <array>
 #include <string>
 
-using namespace std;
 namespace broker
 {
 
 class Broker
 {
-public:
+  public:
     ~Broker();
-    MYSQL_RES* execute(string statement);
+    
+    std::vector<std::vector<std::string> > prepare_and_execute( std::string sql, std::vector<std::string> args );
+    
+    sql::ResultSet* execute(std::string statement);
 
-    void connect(string host, string m_socket, string db, string user, string password);
+    void connect(std::string host,
+                 std::string db,
+                 std::string user,
+                 std::string password);
+            
+    void clean();
 
-private:
-    MYSQL *connection, mysql;
-    MYSQL_RES* result;
-
-    int query_state;
+  private:
+    sql::Driver *driver;
+    sql::Connection *connection;
+    sql::Statement *stmt;
+    sql::ResultSet *res;
 };
 }

@@ -10,9 +10,6 @@ set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 find_package( Boost COMPONENTS program_options REQUIRED )
 
-set( MYSQL_MIN_VER 5.0 )
-find_package( MySQL ${MYSQL_MIN_VER} REQUIRED )
-
 include_directories(
     ${DB_UPDATE_SRC}
     ${Boost_INCLUDE_DIRS}
@@ -27,4 +24,4 @@ set(DB_UPDATE_SOURCE
 
 add_executable (main ${DB_UPDATE_SOURCE})
 target_link_libraries( main ${Boost_LIBRARIES} )
-target_link_libraries( main ${MYSQL_LIBRARIES} )
+target_link_libraries( main /usr/lib/libmysqlcppconn.so )

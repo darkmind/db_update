@@ -2,46 +2,72 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <DB/Broker.hpp>
-#include <mysql.h>
+#include <vector>
+#include <array>
+#include <string>
 #include <sstream>
 
-using namespace std;
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
 
+using namespace std;
 using namespace broker;
 
-MYSQL_RES* Broker::execute(string statement)
+sql::ResultSet* Broker::execute(string statement)
 {
-    query_state = mysql_query(connection, statement.c_str());
-    if(query_state != 0) {
-        ostringstream out;
-        out << "Query preparation failed: " << mysql_error(connection);
-        throw runtime_error(out.str());
+    try {
+        stmt = connection->createStatement();
+        res = stmt->executeQuery(statement);
+    }
+    catch (sql::SQLException &e) {
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        throw runtime_error("");
     }
 
-    result = mysql_store_result(connection);
-    if(result == 0) {
-        ostringstream out;
-        out << "Query run failed: " << mysql_error(connection);
-        throw runtime_error(out.str());
-    }
-
-    return result;
+    return res;
 }
 
-void Broker::connect(string host, string m_socket, string db, string user, string password)
+void Broker::connect(string host, string db, string user, string password)
 {
-    mysql_init(&mysql);
-
-    connection = mysql_real_connect(&mysql, host.c_str(), user.c_str(), password.c_str(),
-        db.c_str(), 3306, m_socket.c_str(), 0);
-    if(connection == 0) {
-        ostringstream out;
-        out << "Can't connect to db: " << mysql_error(connection);
-        throw runtime_error(out.str());
+    try {
+        driver = get_driver_instance();
+        ostringstream dsn;
+        dsn << "tcp://" << host << ":3306";
+        connection = driver->connect(dsn.str(), user, password);
+        connection->setSchema(db);
     }
+    catch (sql::SQLException &e) {
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        throw runtime_error("");
+    }
+}
+
+vector<vector<string> > Broker::prepare_and_execute( string sql, std::vector<std::string> args )
+{
+    sql::PreparedStatement *prep_stmt = connection->prepareStatement(sql.c_str());
+    
+}
+
+void Broker::clean()
+{
+    delete res;
+    delete stmt;
 }
 
 Broker::~Broker()
 {
-    mysql_close(connection);
+    delete res;
+    delete stmt;
+    delete connection;
 }

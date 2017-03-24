@@ -7,20 +7,17 @@
 #include <string>
 #include <vector>
 
-using namespace broker;
-using namespace std;
-
 namespace core
 {
 
 class Core
 {
-public:
-    Core(map<string, string>);
+  public:
+    Core(std::map<std::string, std::string> options);
 
-    vector<vector<string> > execute(string);
+    std::vector<std::vector<std::string>> execute(std::string statement);
 
-private:
-    Broker* broker;
+  private:
+    broker::Broker* broker;
 };
 }
