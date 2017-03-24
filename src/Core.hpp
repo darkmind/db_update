@@ -3,9 +3,7 @@
 
 #pragma once
 #include <DB/Broker.hpp>
-#include <array>
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 

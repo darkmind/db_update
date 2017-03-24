@@ -3,9 +3,7 @@
 
 #include <Core.hpp>
 #include <DB/Broker.hpp>
-#include <array>
 #include <map>
-#include <memory>
 #include <mysql.h>
 #include <vector>
 
