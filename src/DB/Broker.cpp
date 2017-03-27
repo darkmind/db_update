@@ -12,11 +12,12 @@
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
+#include <cppconn/datatype.h>
 
 using namespace std;
-using namespace broker;
 
-sql::ResultSet* Broker::execute(string statement)
+sql::ResultSet* Broker::execute(const string statement)
 {
     try {
         stmt = connection->createStatement();
@@ -34,7 +35,7 @@ sql::ResultSet* Broker::execute(string statement)
     return res;
 }
 
-void Broker::connect(string host, string db, string user, string password)
+void Broker::connect(const string host, const string db, const string user, const string password)
 {
     try {
         driver = get_driver_instance();
@@ -53,10 +54,21 @@ void Broker::connect(string host, string db, string user, string password)
     }
 }
 
-vector<vector<string> > Broker::prepare_and_execute( string sql, std::vector<std::string> args )
+sql::ResultSet* Broker::prepare_and_execute( const string sql, const vector<string> args )
 {
-    sql::PreparedStatement *prep_stmt = connection->prepareStatement(sql.c_str());
-    
+    sql::ResultSet* result;
+    prep_stmt = connection->prepareStatement(sql.c_str());
+    if ( args.at(0).empty() ) {
+        prep_stmt->setNull(1, sql::DataType::SQLNULL);
+        prep_stmt->setNull(2, sql::DataType::SQLNULL);
+    }
+    else {
+        prep_stmt->setString(1, args.at(0));
+        prep_stmt->setString(2, args.at(0));
+    }
+    result = prep_stmt->executeQuery();
+
+    return result;
 }
 
 void Broker::clean()

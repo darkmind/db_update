@@ -2,22 +2,24 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #pragma once
+#include <Types.hpp>
 #include <DB/Broker.hpp>
+#include <IO/IO.hpp>
 #include <map>
 #include <string>
 #include <vector>
 
-namespace core
-{
 
 class Core
 {
   public:
     Core(std::map<std::string, std::string> options);
 
-    std::vector<std::vector<std::string>> execute(std::string statement);
+    mysql_rows execute(std::string statement);
+
+    mysql_rows get_schema(std::string statement);
 
   private:
-    broker::Broker* broker;
+    Broker* broker;
+    IO * io;
 };
-}

@@ -11,15 +11,12 @@
 #include <array>
 #include <string>
 
-namespace broker
-{
-
 class Broker
 {
   public:
     ~Broker();
     
-    std::vector<std::vector<std::string> > prepare_and_execute( std::string sql, std::vector<std::string> args );
+    sql::ResultSet* prepare_and_execute( std::string sql, const std::vector<std::string> args );
     
     sql::ResultSet* execute(std::string statement);
 
@@ -34,6 +31,6 @@ class Broker
     sql::Driver *driver;
     sql::Connection *connection;
     sql::Statement *stmt;
+    sql::PreparedStatement *prep_stmt;
     sql::ResultSet *res;
 };
-}
