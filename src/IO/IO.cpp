@@ -9,11 +9,6 @@
 
 using namespace std;
 
-IO::~IO()
-{
-    delete broker;
-}
-
 IO::IO(Broker * brokerref)
 {
     broker = brokerref;

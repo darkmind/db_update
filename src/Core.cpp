@@ -36,7 +36,7 @@ mysql_rows Core::execute(string statement)
         }
         records.push_back(record_row);
     }
-    broker->clean();
+    delete result;
 
     return records;
 }
@@ -60,6 +60,13 @@ mysql_rows Core::get_schema(const string table_name)
         }
         records.push_back(record_row);
     }
+    delete result;
 
     return records;
+}
+
+Core::~Core()
+{
+    delete io;
+    delete broker;
 }

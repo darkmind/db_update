@@ -13,8 +13,6 @@ class IO
 public:
     IO(Broker * brokerref);
 
-    ~IO();
-
     sql::ResultSet* get_tables_schema( const std::vector<std::string> args );
 
 private:

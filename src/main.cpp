@@ -59,4 +59,8 @@ int main(int ac, char* av[])
         }
         cout << endl;
     }
+
+    delete core;
+
+    return 0;
 }

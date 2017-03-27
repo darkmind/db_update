@@ -15,6 +15,8 @@ class Core
   public:
     Core(std::map<std::string, std::string> options);
 
+    ~Core();
+
     mysql_rows execute(std::string statement);
 
     mysql_rows get_schema(std::string statement);

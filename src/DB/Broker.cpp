@@ -19,9 +19,11 @@ using namespace std;
 
 sql::ResultSet* Broker::execute(const string statement)
 {
+    sql::ResultSet* result;
     try {
-        stmt = connection->createStatement();
-        res = stmt->executeQuery(statement);
+        sql::Statement *stmt = connection->createStatement();
+        result = stmt->executeQuery(statement);
+        delete stmt;
     }
     catch (sql::SQLException &e) {
         cout << "# ERR: SQLException in " << __FILE__;
@@ -32,7 +34,7 @@ sql::ResultSet* Broker::execute(const string statement)
         throw runtime_error("");
     }
 
-    return res;
+    return result;
 }
 
 void Broker::connect(const string host, const string db, const string user, const string password)
@@ -57,29 +59,33 @@ void Broker::connect(const string host, const string db, const string user, cons
 sql::ResultSet* Broker::prepare_and_execute( const string sql, const vector<string> args )
 {
     sql::ResultSet* result;
-    prep_stmt = connection->prepareStatement(sql.c_str());
-    if ( args.at(0).empty() ) {
-        prep_stmt->setNull(1, sql::DataType::SQLNULL);
-        prep_stmt->setNull(2, sql::DataType::SQLNULL);
+    try {
+        sql::PreparedStatement * prep_stmt = connection->prepareStatement(sql.c_str());
+        if ( args.at(0).empty() ) {
+            prep_stmt->setNull(1, sql::DataType::SQLNULL);
+            prep_stmt->setNull(2, sql::DataType::SQLNULL);
+        }
+        else {
+            prep_stmt->setString(1, args.at(0));
+            prep_stmt->setString(2, args.at(0));
+        }
+        result = prep_stmt->executeQuery();
+        delete prep_stmt;
     }
-    else {
-        prep_stmt->setString(1, args.at(0));
-        prep_stmt->setString(2, args.at(0));
+    catch (sql::SQLException &e) {
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        throw runtime_error("");
     }
-    result = prep_stmt->executeQuery();
 
     return result;
 }
 
-void Broker::clean()
-{
-    delete res;
-    delete stmt;
-}
-
 Broker::~Broker()
 {
-    delete res;
-    delete stmt;
     delete connection;
+    driver->threadEnd();
 }

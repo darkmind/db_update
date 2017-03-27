@@ -30,7 +30,4 @@ class Broker
   private:
     sql::Driver *driver;
     sql::Connection *connection;
-    sql::Statement *stmt;
-    sql::PreparedStatement *prep_stmt;
-    sql::ResultSet *res;
 };
