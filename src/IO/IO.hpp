@@ -4,16 +4,18 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <DB/Broker.hpp>
 #include <Types.hpp>
 #include <cppconn/resultset.h>
 
+
 class IO
 {
 public:
-    IO(Broker * brokerref);
+    IO(Broker* brokerref);
 
-    sql::ResultSet* get_tables_schema( const std::vector<std::string> args );
+    schema_type get_tables_schema( schema_type& schema, std::unordered_map<std::string,std::string> args );
 
 private:
     const std::string get_tables_sql = "SELECT TABLE_NAME, ENGINE, TABLE_COLLATION, CREATE_OPTIONS"

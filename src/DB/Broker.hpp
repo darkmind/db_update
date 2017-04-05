@@ -7,6 +7,7 @@
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 #include <vector>
 #include <array>
 #include <string>
@@ -15,16 +16,18 @@ class Broker
 {
   public:
     ~Broker();
-    
-    sql::ResultSet* prepare_and_execute( std::string sql, const std::vector<std::string> args );
-    
-    sql::ResultSet* execute(std::string statement);
+
+    sql::ResultSet* execute(const std::string statement);
+
+    sql::ResultSet* execute(sql::PreparedStatement* statement);
+
+    sql::Connection* get_connection();
 
     void connect(std::string host,
                  std::string db,
                  std::string user,
                  std::string password);
-            
+
     void clean();
 
   private:

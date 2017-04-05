@@ -20,7 +20,7 @@ int main(int ac, char* av[])
         ("db", po::value<string>()->default_value("test"), "name of the schema")
         ("user", po::value<string>()->default_value("root"), "db user")
         ("pass", po::value<string>()->default_value(""), "db password")
-        ("query", po::value<string>()->default_value("select 1 from dual"), "query to run")
+        ("query", po::value<string>()->default_value(""), "query to run")
         ("table_name", po::value<string>()->default_value(""), "get schema of table");
     po::variables_map vm;
     try {
@@ -44,21 +44,30 @@ int main(int ac, char* av[])
     };
 
     Core* core = new Core(options);
-    const mysql_rows records = core->execute(vm["query"].as<string>());
-    for(auto& row : records) {
-        for(auto& val : row) {
-            cout << "'" << val << "' ";
+    if (! vm["query"].as<string>().empty() ) {
+        const mysql_rows records = core->execute(vm["query"].as<string>());
+        for(auto& row : records) {
+            for(auto& val : row) {
+                cout << "'" << val << "' ";
+            }
+            cout << endl;
         }
-        cout << endl;
     }
 
-    const mysql_rows table_schema = core->get_schema(vm["table_name"].as<string>());
-    for(auto& row : table_schema) {
-        for(auto& val : row) {
-            cout << "'" << val << "' ";
+    core->get_schema(vm["table_name"].as<string>());
+    schema_type* schema = core->get_schema_ref();
+
+    for ( auto it = schema->begin(); it != schema->end(); ++it ) {
+        for ( auto& tbls : it->second) {
+            for ( auto tbl = tbls.begin(); tbl != tbls.end(); ++tbl ) {
+                for ( auto cols = tbl->second.begin(); cols != tbl->second.end(); ++cols ) {
+                    std::cout << " [" << cols->first << "] -> " << cols->second << endl;
+                }
+            }
+            std::cout << std::endl;
         }
-        cout << endl;
     }
+    std::cout << std::endl;
 
     delete core;
 

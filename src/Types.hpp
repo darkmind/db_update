@@ -4,14 +4,23 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 typedef std::vector<std::vector<std::string>> mysql_rows;
 
 typedef
-    std::map <
+    std::unordered_map <
         std::string,
-        std::map <std::string,
-            std::string>
+        std::unordered_map <
+            std::string,
+            std::string
+        >
     >
-tbl_schema;
+table_type;
+
+typedef
+    std::unordered_map <
+      std::string,
+      std::vector<table_type>
+    >
+schema_type;

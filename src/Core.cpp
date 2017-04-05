@@ -22,7 +22,7 @@ Core::Core(map<string, string> options)
 mysql_rows Core::execute(string statement)
 {
     sql::ResultSet* result = broker->execute(statement);
-    sql::ResultSetMetaData *res_meta = result->getMetaData();
+    sql::ResultSetMetaData* res_meta = result->getMetaData();
     unsigned int c_num = res_meta->getColumnCount();
     mysql_rows records;
     while (result->next()) {
@@ -41,28 +41,15 @@ mysql_rows Core::execute(string statement)
     return records;
 }
 
-mysql_rows Core::get_schema(const string table_name)
+void Core::get_schema(const string table_name)
 {
-    vector<string> args = {table_name};
-    sql::ResultSet* result = io->get_tables_schema(args);
+    unordered_map<string, string> args;
+    args.insert( unordered_map<string, string>::value_type("table_name", table_name) );
+    schema = io->get_tables_schema(schema, args);
+}
 
-    sql::ResultSetMetaData *res_meta = result->getMetaData();
-    unsigned int c_num = res_meta->getColumnCount();
-    mysql_rows records;
-    while (result->next()) {
-        vector<string> record_row;
-        for(unsigned int i = 1; i <= c_num; i++) {
-            if(result->isNull(i)) {
-                record_row.push_back("NULL");
-            } else {
-                record_row.push_back(result->getString(i));
-            }
-        }
-        records.push_back(record_row);
-    }
-    delete result;
-
-    return records;
+schema_type* Core::get_schema_ref() {
+    return &schema;
 }
 
 Core::~Core()

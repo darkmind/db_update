@@ -19,9 +19,12 @@ class Core
 
     mysql_rows execute(std::string statement);
 
-    mysql_rows get_schema(std::string statement);
+    void get_schema(const std::string table_name );
+
+    schema_type* get_schema_ref();
 
   private:
     Broker* broker;
-    IO * io;
+    IO* io;
+    schema_type schema;
 };
