@@ -16,7 +16,8 @@ Core::Core(map<string, string> options)
 {
     broker = new Broker();
     broker->connect(options.at("host"), options.at("db"), options.at("user"), options.at("pass"));
-    io = new IO( broker );
+    io     = new IO(broker);
+    schema = new schema_type;
 }
 
 mysql_rows Core::execute(string statement)
@@ -45,15 +46,16 @@ void Core::get_schema(const string table_name)
 {
     unordered_map<string, string> args;
     args.insert( unordered_map<string, string>::value_type("table_name", table_name) );
-    schema = io->get_tables_schema(schema, args);
+    io->get_tables_schema(schema, args);
 }
 
 schema_type* Core::get_schema_ref() {
-    return &schema;
+    return schema;
 }
 
 Core::~Core()
 {
     delete io;
     delete broker;
+    delete schema;
 }

@@ -15,7 +15,7 @@ class IO
 public:
     IO(Broker* brokerref);
 
-    schema_type get_tables_schema( schema_type& schema, std::unordered_map<std::string,std::string> args );
+    void get_tables_schema( schema_type* schema, std::unordered_map<std::string,std::string> args );
 
 private:
     const std::string get_tables_sql = "SELECT TABLE_NAME, ENGINE, TABLE_COLLATION, CREATE_OPTIONS"
@@ -24,7 +24,7 @@ private:
             "  AND ( ? IS NULL OR table_name = ? )"
             "  AND TABLE_TYPE='BASE TABLE' ORDER BY TABLE_NAME";
 
-    Broker * broker;
+    Broker* broker;
 
 };
 

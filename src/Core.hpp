@@ -26,5 +26,5 @@ class Core
   private:
     Broker* broker;
     IO* io;
-    schema_type schema;
+    schema_type* schema;
 };

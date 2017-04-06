@@ -21,7 +21,7 @@ IO::IO(Broker * brokerref)
     broker = brokerref;
 }
 
-schema_type IO::get_tables_schema( schema_type& schema, unordered_map<string,string> args )
+void IO::get_tables_schema( schema_type* schema, unordered_map<string,string> args )
 {
     sql::PreparedStatement* prep_stmt = broker->get_connection()->prepareStatement(get_tables_sql);
     auto param = args.find("table_name");
@@ -57,9 +57,11 @@ schema_type IO::get_tables_schema( schema_type& schema, unordered_map<string,str
         }
         tables.push_back(table);
     }
-    schema.insert({"table", tables});
+
+    schema->insert({string("table"), tables});
+
     delete result;
     delete prep_stmt;
 
-    return schema;
+    return ;
 }
