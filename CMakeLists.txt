@@ -18,17 +18,18 @@ else()
 endif()
 
 set( CMAKE_CXX_COMPILER "/usr/bin/clang++" )
-set( CMAKE_CXX_FLAGS_RELEASE "-W -Wall -Wextra -fpic -pipe -O2 -std=c++14 -s")
+set( CMAKE_CXX_FLAGS_RELEASE "-W -Wall -Wextra -fpic -pipe -O2 -std=c++14")
 set( CMAKE_CXX_FLAGS_DEBUG "-W -Wall -Wextra -ggdb -fPIC -pipe -fstack-protector-all -std=c++14")
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 find_package( Boost COMPONENTS program_options REQUIRED )
+find_package( Mysql-Connector-C++ REQUIRED )
 
 include_directories(
     ${DB_UPDATE_SRC}
     ${Boost_INCLUDE_DIRS}
-    ${MYSQL_INCLUDE_DIR}
+    ${MYSQLCONNECTORCPP_INCLUDE_DIR}
 )
 
 set(DB_UPDATE_SOURCE
@@ -41,4 +42,4 @@ set(DB_UPDATE_SOURCE
 
 add_executable (main ${DB_UPDATE_SOURCE})
 target_link_libraries( main ${Boost_LIBRARIES} )
-target_link_libraries( main /usr/lib/libmysqlcppconn.so )
+target_link_libraries( main ${MYSQLCONNECTORCPP_LIBRARIES} )
