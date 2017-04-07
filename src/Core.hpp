@@ -21,10 +21,10 @@ class Core
 
     void get_schema(const std::string table_name );
 
-    schema_type* get_schema_ref();
+    Schema* get_schema_ref();
 
   private:
     Broker* broker;
     IO* io;
-    schema_type* schema;
+    Schema* schema;
 };

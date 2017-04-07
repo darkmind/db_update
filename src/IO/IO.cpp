@@ -4,6 +4,7 @@
 #include <IO/IO.hpp>
 #include <DB/Broker.hpp>
 #include <Types.hpp>
+#include <DB/Schema.hpp>
 
 #include <string>
 #include <vector>
@@ -16,12 +17,12 @@
 
 using namespace std;
 
-IO::IO(Broker * brokerref)
+IO::IO(Broker* brokerref)
 {
     broker = brokerref;
 }
 
-void IO::get_tables_schema( schema_type* schema, unordered_map<string,string> args )
+void IO::get_tables_schema( Schema* schema, unordered_map<string,string> args )
 {
     sql::PreparedStatement* prep_stmt = broker->get_connection()->prepareStatement(get_tables_sql);
     auto param = args.find("table_name");
@@ -36,32 +37,80 @@ void IO::get_tables_schema( schema_type* schema, unordered_map<string,string> ar
 
     sql::ResultSet* result = broker->execute(prep_stmt);
 
-    sql::ResultSetMetaData *res_meta = result->getMetaData();
+    sql::ResultSetMetaData* res_meta = result->getMetaData();
     unsigned int c_num = res_meta->getColumnCount();
-    table_type table;
-    vector<table_type> tables;
+
+    basic_type options;
     string table_name;
     string column_name;
+
     while (result->next()) {
         for(unsigned int i = 1; i <= c_num; i++) {
             column_name = res_meta->getColumnName(i);
-            if( column_name == "table_name" ) {
+            if( column_name == "TABLE_NAME" ) {
                 table_name = result->getString(i);
-                continue;
             }
             if(result->isNull(i)) {
-                table[table_name][column_name] = "NULL";
+                options[column_name] = "NULL";
             } else {
-                table[table_name][column_name] = result->getString(i);
+                options[column_name] = result->getString(i);
             }
         }
-        tables.push_back(table);
+        table_property table_info = {{ "table_info", options }};
+        schema->add_table_info( table_name, table_info );
     }
-
-    schema->insert({string("table"), tables});
 
     delete result;
     delete prep_stmt;
+
+    this->get_cols_for_tables(schema);
+
+    return ;
+}
+
+void IO::get_cols_for_tables( Schema* schema ) {
+    sql::PreparedStatement* prep_stmt;
+    sql::ResultSet* result;
+    sql::ResultSetMetaData* res_meta;
+    unsigned int c_num;
+    string column_name;
+    string col;
+    basic_type options;
+    column_type column;
+    table_property columns;
+
+    vector<string> tables = schema->get_tables_list();
+    if ( tables.size() ) {
+        prep_stmt = broker->get_connection()->prepareStatement(get_cols_sql);
+        auto it = tables.begin();
+        while ( it != tables.end() ) {
+            prep_stmt->setString( 1, *it );
+            result   = broker->execute(prep_stmt);
+            res_meta = result->getMetaData();
+            c_num    = res_meta->getColumnCount();
+
+            while ( result->next() ) {
+                for(unsigned int i = 1; i <= c_num; i++) {
+                    col = res_meta->getColumnName(i);
+                    if( col == "COLUMN_NAME" ) {
+                        column_name = result->getString(i);
+                    }
+                    if(result->isNull(i)) {
+                        options[col] = "NULL";
+                    } else {
+                        options[col] = result->getString(i);
+                    }
+                }
+                column.insert( {{ column_name, options }} );
+            }
+            columns.insert( {{ "columns", column }} );
+            schema->add_table_columns( *it, columns );
+
+            it++;
+        }
+        delete result;
+        delete prep_stmt;
+    }
 
     return ;
 }

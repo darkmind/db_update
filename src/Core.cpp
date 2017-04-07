@@ -4,6 +4,7 @@
 #include <Core.hpp>
 #include <Types.hpp>
 #include <DB/Broker.hpp>
+#include <DB/Schema.hpp>
 #include <IO/IO.hpp>
 #include <map>
 #include <cppconn/resultset.h>
@@ -17,7 +18,7 @@ Core::Core(map<string, string> options)
     broker = new Broker();
     broker->connect(options.at("host"), options.at("db"), options.at("user"), options.at("pass"));
     io     = new IO(broker);
-    schema = new schema_type;
+    schema = Schema::Instance();
 }
 
 mysql_rows Core::execute(string statement)
@@ -44,12 +45,11 @@ mysql_rows Core::execute(string statement)
 
 void Core::get_schema(const string table_name)
 {
-    unordered_map<string, string> args;
-    args.insert( unordered_map<string, string>::value_type("table_name", table_name) );
+    unordered_map<string, string> args = {{ "table_name", table_name }};
     io->get_tables_schema(schema, args);
 }
 
-schema_type* Core::get_schema_ref() {
+Schema* Core::get_schema_ref() {
     return schema;
 }
 
@@ -57,5 +57,4 @@ Core::~Core()
 {
     delete io;
     delete broker;
-    delete schema;
 }

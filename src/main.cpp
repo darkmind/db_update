@@ -3,6 +3,7 @@
 
 #include <Core.hpp>
 #include <Types.hpp>
+#include <DB/Schema.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
@@ -55,19 +56,9 @@ int main(int ac, char* av[])
     }
 
     core->get_schema(vm["table_name"].as<string>());
-    schema_type* schema = core->get_schema_ref();
+    Schema* schema = core->get_schema_ref();
 
-    for ( auto it = schema->begin(); it != schema->end(); ++it ) {
-        for ( auto& tbls : it->second) {
-            for ( auto tbl = tbls.begin(); tbl != tbls.end(); ++tbl ) {
-                for ( auto cols = tbl->second.begin(); cols != tbl->second.end(); ++cols ) {
-                    std::cout << " [" << cols->first << "] -> " << cols->second << endl;
-                }
-            }
-            std::cout << std::endl;
-        }
-    }
-    std::cout << std::endl;
+    schema->print_schema();
 
     delete core;
 
