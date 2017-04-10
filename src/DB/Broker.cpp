@@ -6,7 +6,8 @@
 #include <array>
 #include <string>
 #include <sstream>
-
+#include <memory>
+#include <memory>
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -55,13 +56,31 @@ sql::ResultSet* Broker::execute(sql::PreparedStatement* statement)
     return result;
 }
 
+sql::ResultSet* Broker::execute(shared_ptr<sql::PreparedStatement> statement)
+{
+    sql::ResultSet* result;
+    try {
+        result = statement->executeQuery();
+    }
+    catch (sql::SQLException &e) {
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        throw runtime_error("");
+    }
+
+    return result;
+}
+
 void Broker::connect(const string host, const string db, const string user, const string password)
 {
     try {
         driver = get_driver_instance();
         ostringstream dsn;
         dsn << "tcp://" << host << ":3306";
-        connection = driver->connect(dsn.str(), user, password);
+        connection = shared_ptr<sql::Connection>(driver->connect(dsn.str(), user, password));
         connection->setSchema(db);
     }
     catch (sql::SQLException &e) {
@@ -74,12 +93,11 @@ void Broker::connect(const string host, const string db, const string user, cons
     }
 }
 
-sql::Connection* Broker::get_connection(){
+shared_ptr<sql::Connection> Broker::get_connection(){
     return connection;
 }
 
 Broker::~Broker()
 {
-    delete connection;
     driver->threadEnd();
 }

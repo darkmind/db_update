@@ -44,7 +44,7 @@ int main(int ac, char* av[])
         {"db", vm["db"].as<string>()},
     };
 
-    Core* core = new Core(options);
+    shared_ptr<Core> core = shared_ptr<Core>( new Core(options) );
     if (! vm["query"].as<string>().empty() ) {
         const mysql_rows records = core->execute(vm["query"].as<string>());
         for(auto& row : records) {
@@ -56,11 +56,9 @@ int main(int ac, char* av[])
     }
 
     core->get_schema(vm["table_name"].as<string>());
-    Schema* schema = core->get_schema_ref();
+    shared_ptr<Schema> schema = core->get_schema_ref();
 
     schema->print_schema();
-
-    delete core;
 
     return 0;
 }

@@ -10,12 +10,9 @@
 
 class Schema
 {
-    static Schema* ms_instance;
 
 public:
-    static Schema* Instance();
-
-    static void Release();
+    Schema();
 
     void print_schema();
 
@@ -26,10 +23,6 @@ public:
     std::vector<std::string> get_tables_list();
 
 private:
-    Schema();
-
-    ~Schema();
-
-    schema_type* schema;
+    std::shared_ptr<schema_type> schema;
 };
 

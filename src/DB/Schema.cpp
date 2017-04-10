@@ -6,36 +6,12 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
-#include <typeinfo>
-#include <cstdlib> // NULL
+#include <memory>
 
 using namespace std;
 
-Schema* Schema::ms_instance = NULL;
-
-Schema::Schema()
-{
-    schema = new schema_type;
-}
-
-Schema::~Schema()
-{
-}
-
-Schema* Schema::Instance()
-{
-    if (ms_instance == NULL) {
-        ms_instance = new Schema();
-    }
-    return ms_instance;
-}
-
-void Schema::Release()
-{
-    if (ms_instance) {
-        delete ms_instance;
-    }
-    ms_instance = NULL;
+Schema::Schema() {
+    schema = shared_ptr<schema_type>( new schema_type );
 }
 
 void Schema::print_schema() {

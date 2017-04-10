@@ -14,11 +14,11 @@
 class IO
 {
 public:
-    IO( Broker* brokerref );
+    IO( std::shared_ptr<Broker> brokerref );
 
-    void get_tables_schema( Schema* schema, std::unordered_map<std::string,std::string> args );
+    void get_tables_schema( std::shared_ptr<Schema> schema, std::unordered_map<std::string,std::string> args );
 
-    void get_cols_for_tables( Schema* schema );
+    void get_cols_for_tables( std::shared_ptr<Schema> schema );
 
 private:
     const std::string get_tables_sql = "SELECT TABLE_NAME, ENGINE, TABLE_COLLATION, CREATE_OPTIONS"
@@ -37,7 +37,7 @@ private:
         " AND t.TABLE_SCHEMA=DATABASE()"
         " ORDER BY c.TABLE_NAME, c.COLUMN_NAME";
 
-    Broker* broker;
+    std::shared_ptr<Broker> broker;
 
 };
 

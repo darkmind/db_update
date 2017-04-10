@@ -6,6 +6,7 @@
 #include <DB/Broker.hpp>
 #include <DB/Schema.hpp>
 #include <IO/IO.hpp>
+#include <memory>
 #include <map>
 #include <cppconn/resultset.h>
 #include <cppconn/resultset_metadata.h>
@@ -15,15 +16,15 @@ using namespace std;
 
 Core::Core(map<string, string> options)
 {
-    broker = new Broker();
+    broker = shared_ptr<Broker>( new Broker() );
     broker->connect(options.at("host"), options.at("db"), options.at("user"), options.at("pass"));
-    io     = new IO(broker);
-    schema = Schema::Instance();
+    io     = shared_ptr<IO>( new IO(broker) );
+    schema = shared_ptr<Schema>( new Schema() );
 }
 
 mysql_rows Core::execute(string statement)
 {
-    sql::ResultSet* result = broker->execute(statement);
+    unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(statement) );
     sql::ResultSetMetaData* res_meta = result->getMetaData();
     unsigned int c_num = res_meta->getColumnCount();
     mysql_rows records;
@@ -38,7 +39,6 @@ mysql_rows Core::execute(string statement)
         }
         records.push_back(record_row);
     }
-    delete result;
 
     return records;
 }
@@ -49,12 +49,6 @@ void Core::get_schema(const string table_name)
     io->get_tables_schema(schema, args);
 }
 
-Schema* Core::get_schema_ref() {
+shared_ptr<Schema> Core::get_schema_ref() {
     return schema;
-}
-
-Core::~Core()
-{
-    delete io;
-    delete broker;
 }

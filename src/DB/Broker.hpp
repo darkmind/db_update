@@ -8,8 +8,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
-#include <vector>
-#include <array>
+#include <memory>
 #include <string>
 
 class Broker
@@ -20,8 +19,9 @@ class Broker
     sql::ResultSet* execute(const std::string statement);
 
     sql::ResultSet* execute(sql::PreparedStatement* statement);
+    sql::ResultSet* execute( std::shared_ptr<sql::PreparedStatement> statement );
 
-    sql::Connection* get_connection();
+    std::shared_ptr<sql::Connection> get_connection();
 
     void connect(std::string host,
                  std::string db,
@@ -32,5 +32,5 @@ class Broker
 
   private:
     sql::Driver *driver;
-    sql::Connection *connection;
+    std::shared_ptr<sql::Connection> connection;
 };

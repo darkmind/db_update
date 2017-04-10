@@ -6,6 +6,7 @@
 #include <DB/Broker.hpp>
 #include <IO/IO.hpp>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -13,18 +14,16 @@
 class Core
 {
   public:
-    Core(std::map<std::string, std::string> options);
+    Core( std::map<std::string, std::string> options );
 
-    ~Core();
+    mysql_rows execute( std::string statement );
 
-    mysql_rows execute(std::string statement);
+    void get_schema( const std::string table_name );
 
-    void get_schema(const std::string table_name );
-
-    Schema* get_schema_ref();
+    std::shared_ptr<Schema> get_schema_ref();
 
   private:
-    Broker* broker;
-    IO* io;
-    Schema* schema;
+    std::shared_ptr<Broker> broker;
+    std::shared_ptr<IO> io;
+    std::shared_ptr<Schema> schema;
 };

@@ -7,6 +7,7 @@
 #include <DB/Schema.hpp>
 
 #include <string>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 
@@ -17,14 +18,16 @@
 
 using namespace std;
 
-IO::IO(Broker* brokerref)
+IO::IO( std::shared_ptr<Broker> brokerref )
 {
     broker = brokerref;
 }
 
-void IO::get_tables_schema( Schema* schema, unordered_map<string,string> args )
+void IO::get_tables_schema( shared_ptr<Schema> schema, unordered_map<string,string> args )
 {
-    sql::PreparedStatement* prep_stmt = broker->get_connection()->prepareStatement(get_tables_sql);
+    shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
+        broker->get_connection()->prepareStatement(get_tables_sql) );
+
     auto param = args.find("table_name");
     if ( param != args.end() && ! param->second.empty() ) {
         prep_stmt->setString( 1, param->second );
@@ -35,7 +38,7 @@ void IO::get_tables_schema( Schema* schema, unordered_map<string,string> args )
         prep_stmt->setNull( 2, sql::DataType::SQLNULL );
     }
 
-    sql::ResultSet* result = broker->execute(prep_stmt);
+    unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
 
     sql::ResultSetMetaData* res_meta = result->getMetaData();
     unsigned int c_num = res_meta->getColumnCount();
@@ -60,37 +63,33 @@ void IO::get_tables_schema( Schema* schema, unordered_map<string,string> args )
         schema->add_table_info( table_name, table_info );
     }
 
-    delete result;
-    delete prep_stmt;
-
     this->get_cols_for_tables(schema);
 
     return ;
 }
 
-void IO::get_cols_for_tables( Schema* schema ) {
-    sql::PreparedStatement* prep_stmt;
-    sql::ResultSet* result;
-    sql::ResultSetMetaData* res_meta;
-    unsigned int c_num;
-    string column_name;
-    string col;
-    basic_type options;
-    column_type column;
-    table_property columns;
-
+void IO::get_cols_for_tables( shared_ptr<Schema> schema ) {
     vector<string> tables = schema->get_tables_list();
+
     if ( tables.size() ) {
-        prep_stmt = broker->get_connection()->prepareStatement(get_cols_sql);
+        shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
+            broker->get_connection()->prepareStatement(get_cols_sql) );
+
         auto it = tables.begin();
         while ( it != tables.end() ) {
             prep_stmt->setString( 1, *it );
-            result   = broker->execute(prep_stmt);
-            res_meta = result->getMetaData();
-            c_num    = res_meta->getColumnCount();
+            unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
+            sql::ResultSetMetaData* res_meta  = result->getMetaData();
+            unsigned int c_num                = res_meta->getColumnCount();
+
+            string column_name;
+            string col;
+            basic_type options;
+            column_type column;
+            table_property columns;
 
             while ( result->next() ) {
-                for(unsigned int i = 1; i <= c_num; i++) {
+                for( unsigned int i = 1; i <= c_num; i++ ) {
                     col = res_meta->getColumnName(i);
                     if( col == "COLUMN_NAME" ) {
                         column_name = result->getString(i);
@@ -108,8 +107,6 @@ void IO::get_cols_for_tables( Schema* schema ) {
 
             it++;
         }
-        delete result;
-        delete prep_stmt;
     }
 
     return ;
