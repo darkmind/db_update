@@ -23,7 +23,7 @@ IO::IO( std::shared_ptr<Broker> brokerref )
     broker = brokerref;
 }
 
-void IO::get_tables_schema( shared_ptr<Schema> schema, unordered_map<string,string> args )
+void IO::get_tables_schema( shared_ptr<Schema> schema, const unordered_map<string,string> args )
 {
     shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
         broker->get_connection()->prepareStatement(get_tables_sql) );
@@ -38,22 +38,22 @@ void IO::get_tables_schema( shared_ptr<Schema> schema, unordered_map<string,stri
         prep_stmt->setNull( 2, sql::DataType::SQLNULL );
     }
 
-    unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
+    const unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
 
     sql::ResultSetMetaData* res_meta = result->getMetaData();
-    unsigned int c_num = res_meta->getColumnCount();
+    const unsigned int c_num = res_meta->getColumnCount();
 
     basic_type options;
     string table_name;
     string column_name;
 
-    while (result->next()) {
-        for(unsigned int i = 1; i <= c_num; i++) {
+    while ( result->next() ) {
+        for( unsigned int i = 1; i <= c_num; i++ ) {
             column_name = res_meta->getColumnName(i);
             if( column_name == "TABLE_NAME" ) {
                 table_name = result->getString(i);
             }
-            if(result->isNull(i)) {
+            if( result->isNull(i) ) {
                 options[column_name] = "NULL";
             } else {
                 options[column_name] = result->getString(i);
@@ -69,7 +69,7 @@ void IO::get_tables_schema( shared_ptr<Schema> schema, unordered_map<string,stri
 }
 
 void IO::get_cols_for_tables( shared_ptr<Schema> schema ) {
-    vector<string> tables = schema->get_tables_list();
+    const vector<string> tables = schema->get_tables_list();
 
     if ( tables.size() ) {
         shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
@@ -78,9 +78,9 @@ void IO::get_cols_for_tables( shared_ptr<Schema> schema ) {
         auto it = tables.begin();
         while ( it != tables.end() ) {
             prep_stmt->setString( 1, *it );
-            unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
-            sql::ResultSetMetaData* res_meta  = result->getMetaData();
-            unsigned int c_num                = res_meta->getColumnCount();
+            const unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
+            sql::ResultSetMetaData* res_meta        = result->getMetaData();
+            const unsigned int c_num                = res_meta->getColumnCount();
 
             string column_name;
             string col;

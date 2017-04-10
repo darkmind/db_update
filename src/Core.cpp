@@ -14,7 +14,7 @@
 
 using namespace std;
 
-Core::Core(map<string, string> options)
+Core::Core( const map<string, string> options )
 {
     broker = shared_ptr<Broker>( new Broker() );
     broker->connect(options.at("host"), options.at("db"), options.at("user"), options.at("pass"));
@@ -22,19 +22,19 @@ Core::Core(map<string, string> options)
     schema = shared_ptr<Schema>( new Schema() );
 }
 
-mysql_rows Core::execute(string statement)
+mysql_rows Core::execute( const string statement )
 {
-    unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(statement) );
-    sql::ResultSetMetaData* res_meta = result->getMetaData();
-    unsigned int c_num = res_meta->getColumnCount();
+    const unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(statement) );
+    sql::ResultSetMetaData* res_meta        = result->getMetaData();
+    const unsigned int c_num                = res_meta->getColumnCount();
     mysql_rows records;
-    while (result->next()) {
+    while ( result->next() ) {
         vector<string> record_row;
-        for(unsigned int i = 1; i <= c_num; i++) {
+        for( unsigned int i = 1; i <= c_num; i++ ) {
             if(result->isNull(i)) {
                 record_row.push_back("NULL");
             } else {
-                record_row.push_back(result->getString(i));
+                record_row.push_back( result->getString(i) );
             }
         }
         records.push_back(record_row);
@@ -43,10 +43,10 @@ mysql_rows Core::execute(string statement)
     return records;
 }
 
-void Core::get_schema(const string table_name)
+void Core::get_schema( const string table_name )
 {
     unordered_map<string, string> args = {{ "table_name", table_name }};
-    io->get_tables_schema(schema, args);
+    io->get_tables_schema( schema, args );
 }
 
 shared_ptr<Schema> Core::get_schema_ref() {

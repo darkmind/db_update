@@ -13,7 +13,7 @@
 using namespace std;
 namespace po = boost::program_options;
 
-int main(int ac, char* av[])
+int main( int ac, char* av[] )
 {
     po::options_description desc("Allowed options");
     desc.add_options()("help", "produce help message")
@@ -25,7 +25,7 @@ int main(int ac, char* av[])
         ("table_name", po::value<string>()->default_value(""), "get schema of table");
     po::variables_map vm;
     try {
-        po::store(po::parse_command_line(ac, av, desc), vm);
+        po::store( po::parse_command_line(ac, av, desc), vm );
     } catch(const std::exception& e) {
         cout << "Can't parse passed parameters" << endl;
         cout << e.what() << endl;
@@ -33,7 +33,7 @@ int main(int ac, char* av[])
     }
     po::notify(vm);
 
-    if(vm.count("help")) {
+    if( vm.count("help") ) {
         cout << desc << endl;
         return 1;
     }
@@ -46,7 +46,7 @@ int main(int ac, char* av[])
 
     shared_ptr<Core> core = shared_ptr<Core>( new Core(options) );
     if (! vm["query"].as<string>().empty() ) {
-        const mysql_rows records = core->execute(vm["query"].as<string>());
+        const mysql_rows records = core->execute( vm["query"].as<string>() );
         for(auto& row : records) {
             for(auto& val : row) {
                 cout << "'" << val << "' ";
@@ -55,7 +55,7 @@ int main(int ac, char* av[])
         }
     }
 
-    core->get_schema(vm["table_name"].as<string>());
+    core->get_schema( vm["table_name"].as<string>() );
     shared_ptr<Schema> schema = core->get_schema_ref();
 
     schema->print_schema();

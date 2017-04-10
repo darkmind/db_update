@@ -16,21 +16,23 @@ class Broker
   public:
     ~Broker();
 
-    sql::ResultSet* execute(const std::string statement);
+    sql::ResultSet* execute( const std::string statement );
 
-    sql::ResultSet* execute(sql::PreparedStatement* statement);
+    sql::ResultSet* execute( sql::PreparedStatement* statement );
+
     sql::ResultSet* execute( std::shared_ptr<sql::PreparedStatement> statement );
 
     std::shared_ptr<sql::Connection> get_connection();
 
-    void connect(std::string host,
+    void connect( std::string host,
                  std::string db,
                  std::string user,
-                 std::string password);
+                 std::string password );
 
     void clean();
 
   private:
     sql::Driver *driver;
+
     std::shared_ptr<sql::Connection> connection;
 };

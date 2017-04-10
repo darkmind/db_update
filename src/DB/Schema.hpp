@@ -16,9 +16,9 @@ public:
 
     void print_schema();
 
-    void add_table_columns( std::string table_name, table_property columns );
+    void add_table_columns( const std::string table_name, const table_property columns );
 
-    void add_table_info( std::string table_name, table_property table_info );
+    void add_table_info( const std::string table_name, const table_property table_info );
 
     std::vector<std::string> get_tables_list();
 

@@ -41,7 +41,7 @@ void Schema::print_schema() {
     cout << endl;
 }
 
-void Schema::add_table_columns( string table_name, table_property columns ) {
+void Schema::add_table_columns( const string table_name, const table_property columns ) {
     unordered_map<string, table_property> tbl = {{ table_name, columns }};
 
     auto tables = schema->find("tables");
@@ -62,7 +62,7 @@ void Schema::add_table_columns( string table_name, table_property columns ) {
     return ;
 }
 
-void Schema::add_table_info( string table_name, table_property table_info ) {
+void Schema::add_table_info( const string table_name, const table_property table_info ) {
     auto tables = schema->find("tables");
     if ( tables == schema->end() ) {
         unordered_map<string, table_property> tbl = {{ table_name, table_info }};
@@ -79,7 +79,7 @@ vector<string> Schema::get_tables_list() {
     vector<string> tables;
 
     for ( auto it : *schema ) {
-        for ( auto& tbls : it.second) {
+        for ( auto& tbls : it.second ) {
             tables.push_back(tbls.first);
         }
     }

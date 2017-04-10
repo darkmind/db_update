@@ -18,7 +18,7 @@
 
 using namespace std;
 
-sql::ResultSet* Broker::execute(const string statement)
+sql::ResultSet* Broker::execute( const string statement )
 {
     sql::ResultSet* result;
     try {
@@ -38,7 +38,7 @@ sql::ResultSet* Broker::execute(const string statement)
     return result;
 }
 
-sql::ResultSet* Broker::execute(sql::PreparedStatement* statement)
+sql::ResultSet* Broker::execute( sql::PreparedStatement* statement )
 {
     sql::ResultSet* result;
     try {
@@ -56,7 +56,7 @@ sql::ResultSet* Broker::execute(sql::PreparedStatement* statement)
     return result;
 }
 
-sql::ResultSet* Broker::execute(shared_ptr<sql::PreparedStatement> statement)
+sql::ResultSet* Broker::execute( shared_ptr<sql::PreparedStatement> statement )
 {
     sql::ResultSet* result;
     try {
@@ -74,13 +74,13 @@ sql::ResultSet* Broker::execute(shared_ptr<sql::PreparedStatement> statement)
     return result;
 }
 
-void Broker::connect(const string host, const string db, const string user, const string password)
+void Broker::connect( const string host, const string db, const string user, const string password )
 {
     try {
         driver = get_driver_instance();
         ostringstream dsn;
         dsn << "tcp://" << host << ":3306";
-        connection = shared_ptr<sql::Connection>(driver->connect(dsn.str(), user, password));
+        connection = shared_ptr<sql::Connection>( driver->connect( dsn.str(), user, password ) );
         connection->setSchema(db);
     }
     catch (sql::SQLException &e) {
@@ -93,7 +93,8 @@ void Broker::connect(const string host, const string db, const string user, cons
     }
 }
 
-shared_ptr<sql::Connection> Broker::get_connection(){
+shared_ptr<sql::Connection> Broker::get_connection()
+{
     return connection;
 }
 
