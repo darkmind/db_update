@@ -18,8 +18,9 @@ else()
 endif()
 
 set( CMAKE_CXX_COMPILER "/usr/bin/clang++" )
-set( CMAKE_CXX_FLAGS_RELEASE "-W -Wall -Wextra -fpic -pipe -O2 -std=c++14")
-set( CMAKE_CXX_FLAGS_DEBUG "-W -Wall -Wextra -ggdb -fPIC -pipe -fstack-protector-all -std=c++14")
+set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe")
+set( CMAKE_CXX_FLAGS_RELEASE "-fpic -O2")
+set( CMAKE_CXX_FLAGS_DEBUG "-glldb -fPIC -fstack-protector-all")
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
