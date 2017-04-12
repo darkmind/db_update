@@ -18,9 +18,9 @@ else()
 endif()
 
 set( CMAKE_CXX_COMPILER "/usr/bin/clang++" )
-set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe")
-set( CMAKE_CXX_FLAGS_RELEASE "-fpic -O2")
-set( CMAKE_CXX_FLAGS_DEBUG "-glldb -fPIC -fstack-protector-all")
+set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe -fpic")
+set( CMAKE_CXX_FLAGS_RELEASE "-O2")
+set( CMAKE_CXX_FLAGS_DEBUG "-O0 -glldb -fstack-protector-all")
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -38,6 +38,7 @@ set(DB_UPDATE_SOURCE
     ${DB_UPDATE_SRC}/DB/Schema.cpp
     ${DB_UPDATE_SRC}/IO/IO.cpp
     ${DB_UPDATE_SRC}/Core.cpp
+    ${DB_UPDATE_SRC}/Stages/Check.cpp
     ${DB_UPDATE_SRC}/main.cpp
 )
 

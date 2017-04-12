@@ -2,9 +2,9 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #pragma once
-#include <Types.hpp>
-#include <DB/Broker.hpp>
-#include <IO/IO.hpp>
+#include "Types.hpp"
+#include "DB/Broker.hpp"
+#include "IO/IO.hpp"
 #include <map>
 #include <memory>
 #include <string>
@@ -14,11 +14,11 @@
 class Core
 {
   public:
-    Core( const std::map<std::string, std::string> options );
+    explicit Core( const std::map<std::string, std::string>& options );
 
-    mysql_rows execute( const std::string statement );
+    mysql_rows execute( const std::string& statement );
 
-    void get_schema( const std::string table_name );
+    void get_schema( const std::string& table_name );
 
     std::shared_ptr<Schema> get_schema_ref();
 

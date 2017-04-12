@@ -1,7 +1,7 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include <DB/Schema.hpp>
+#include "Schema.hpp"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -10,27 +10,24 @@
 
 using namespace std;
 
-Schema::Schema() {
-    schema = shared_ptr<schema_type>( new schema_type );
-}
+Schema::Schema() : schema( shared_ptr<schema_type>( new schema_type ) )
+{}
 
 void Schema::print_schema() {
     for ( auto it : *schema ) {
         cout << "[ " << it.first << " ]" << endl << endl;
-        for ( auto& tbls : it.second) {
+        for ( auto tbls : it.second) {
             cout << " [table name] " << tbls.first << endl;
-
             cout << "   [table_info]" << endl;
-            auto& tbl = boost::get<basic_type>( tbls.second.at("table_info") );
-            for ( auto& opt : tbl ) {
+            auto tbl = boost::get<basic_type>( tbls.second.at("table_info") );
+            for ( auto opt : tbl ) {
                 cout << "      [" << opt.first << "] -> " << opt.second << endl;
             }
-
             cout << "   [columns]" << endl;
-            auto& cols = boost::get<column_type>( tbls.second.at("columns") );
-            for ( auto& col : cols ) {
+            auto cols = boost::get<column_type>( tbls.second.at("columns") );
+            for ( auto col : cols ) {
                 cout << "     [" << col.first << "]" << endl;
-                for ( auto& opt : col.second ) {
+                for ( auto opt : col.second ) {
                     cout << "      [" << opt.first << "] -> " << opt.second << endl;
                 }
             }
@@ -41,7 +38,7 @@ void Schema::print_schema() {
     cout << endl;
 }
 
-void Schema::add_table_columns( const string table_name, const table_property columns ) {
+void Schema::add_table_columns( const string& table_name, const table_property& columns ) {
     unordered_map<string, table_property> tbl = {{ table_name, columns }};
 
     auto tables = schema->find("tables");
@@ -62,7 +59,7 @@ void Schema::add_table_columns( const string table_name, const table_property co
     return ;
 }
 
-void Schema::add_table_info( const string table_name, const table_property table_info ) {
+void Schema::add_table_info( const string& table_name, const table_property& table_info ) {
     auto tables = schema->find("tables");
     if ( tables == schema->end() ) {
         unordered_map<string, table_property> tbl = {{ table_name, table_info }};
@@ -85,5 +82,10 @@ vector<string> Schema::get_tables_list() {
     }
 
     return tables;
+}
+
+shared_ptr<schema_type> Schema::get_schema()
+{
+    return schema;
 }
 

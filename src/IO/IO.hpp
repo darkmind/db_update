@@ -14,7 +14,7 @@
 class IO
 {
 public:
-    IO( std::shared_ptr<Broker> brokerref );
+    explicit IO( std::shared_ptr<Broker> brokerref );
 
     void get_tables_schema( std::shared_ptr<Schema> schema, std::unordered_map<std::string,std::string> args );
 

@@ -1,9 +1,10 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include <Core.hpp>
-#include <Types.hpp>
-#include <DB/Schema.hpp>
+#include "Core.hpp"
+#include "Types.hpp"
+#include "DB/Schema.hpp"
+#include "Stages/Check.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <map>
@@ -22,11 +23,14 @@ int main( int ac, char* av[] )
         ("user", po::value<string>()->default_value("root"), "db user")
         ("pass", po::value<string>()->default_value(""), "db password")
         ("query", po::value<string>()->default_value(""), "query to run")
-        ("table_name", po::value<string>()->default_value(""), "get schema of table");
+        ("table_name", po::value<string>()->default_value(""), "get schema of table")
+        ("print_schema", "print schema to output")
+        ("check", "run check of schema")
+        ("source_file", po::value<string>()->default_value("schema.yml"), "file with schema ref");
     po::variables_map vm;
     try {
         po::store( po::parse_command_line(ac, av, desc), vm );
-    } catch(const std::exception& e) {
+    } catch(const exception& e) {
         cout << "Can't parse passed parameters" << endl;
         cout << e.what() << endl;
         return 0;
@@ -58,7 +62,16 @@ int main( int ac, char* av[] )
     core->get_schema( vm["table_name"].as<string>() );
     shared_ptr<Schema> schema = core->get_schema_ref();
 
-    schema->print_schema();
+    if ( vm.count("print_schema") ) {
+        schema->print_schema();
+    }
+
+    if ( vm.count("check") ) {
+        if ( ! Check::run( schema, vm["source_file"].as<string>() ) ) {
+            cout << "Check is failed, see datails above" << endl;
+            return 1;
+        }
+    }
 
     return 0;
 }

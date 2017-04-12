@@ -13,10 +13,12 @@
 
 class Broker
 {
-  public:
+public:
+    Broker();
+
     ~Broker();
 
-    sql::ResultSet* execute( const std::string statement );
+    sql::ResultSet* execute( const std::string& statement );
 
     sql::ResultSet* execute( sql::PreparedStatement* statement );
 

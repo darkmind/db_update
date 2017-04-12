@@ -1,12 +1,11 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include <DB/Broker.hpp>
+#include "DB/Broker.hpp"
 #include <vector>
 #include <array>
 #include <string>
 #include <sstream>
-#include <memory>
 #include <memory>
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
@@ -18,7 +17,7 @@
 
 using namespace std;
 
-sql::ResultSet* Broker::execute( const string statement )
+sql::ResultSet* Broker::execute( const string& statement )
 {
     sql::ResultSet* result;
     try {
@@ -97,6 +96,9 @@ shared_ptr<sql::Connection> Broker::get_connection()
 {
     return connection;
 }
+
+Broker::Broker()
+{}
 
 Broker::~Broker()
 {
