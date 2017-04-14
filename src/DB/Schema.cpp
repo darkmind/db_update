@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Schema.hpp"
+#include "Schema_Walker.hpp"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -14,28 +15,7 @@ Schema::Schema() : schema( shared_ptr<schema_type>( new schema_type ) )
 {}
 
 void Schema::print_schema() {
-    for ( auto it : *schema ) {
-        cout << "[ " << it.first << " ]" << endl << endl;
-        for ( auto tbls : it.second) {
-            cout << " [table name] " << tbls.first << endl;
-            cout << "   [table_info]" << endl;
-            auto tbl = boost::get<basic_type>( tbls.second.at("table_info") );
-            for ( auto opt : tbl ) {
-                cout << "      [" << opt.first << "] -> " << opt.second << endl;
-            }
-            cout << "   [columns]" << endl;
-            auto cols = boost::get<column_type>( tbls.second.at("columns") );
-            for ( auto col : cols ) {
-                cout << "     [" << col.first << "]" << endl;
-                for ( auto opt : col.second ) {
-                    cout << "      [" << opt.first << "] -> " << opt.second << endl;
-                }
-            }
-
-            cout << endl;
-        }
-    }
-    cout << endl;
+    Schema_Walker::travel_schema(schema);
 }
 
 void Schema::add_table_columns( const string& table_name, const table_property& columns ) {

@@ -36,6 +36,7 @@ include_directories(
 set(DB_UPDATE_SOURCE
     ${DB_UPDATE_SRC}/DB/Broker.cpp
     ${DB_UPDATE_SRC}/DB/Schema.cpp
+    ${DB_UPDATE_SRC}/DB/Schema_Walker.cpp
     ${DB_UPDATE_SRC}/IO/IO.cpp
     ${DB_UPDATE_SRC}/Core.cpp
     ${DB_UPDATE_SRC}/Stages/Check.cpp

@@ -4,6 +4,7 @@
 #include "Core.hpp"
 #include "Types.hpp"
 #include "DB/Schema.hpp"
+#include "DB/Schema_Walker.hpp"
 #include "Stages/Check.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
