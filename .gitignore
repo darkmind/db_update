@@ -1,0 +1,12 @@
+.cmake_dirty
+.codelite/
+Debug/
+Makefile
+Release/
+a.out
+compilation.db
+db_update.mk
+xz.cpp
+xz.o
+xz.s
+
