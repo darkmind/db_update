@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Project Name="db_update" InternalType="Console">
+  <Plugins>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": true,
+  "buildDirectory": "$(IntermediateDirectory)",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "Unix Makefiles",
+  "buildType": "Debug",
+  "arguments": ["-DCMAKE_EXPORT_COMPILE_COMMANDS=On"],
+  "parentProject": ""
+ }, {
+  "name": "Debug_Linux",
+  "enabled": true,
+  "buildDirectory": "$(IntermediateDirectory)",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "Unix Makefiles",
+  "buildType": "Debug",
+  "arguments": [],
+  "parentProject": ""
+ }, {
+  "name": "Release",
+  "enabled": true,
+  "buildDirectory": "$(IntermediateDirectory)",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "Unix Makefiles",
+  "buildType": "Release",
+  "arguments": ["-DCMAKE_EXPORT_COMPILE_COMMANDS=On"],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="resources">
+    <File Name="CMakeLists.txt"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="src">
+    <File Name="src/main.cpp"/>
+    <File Name="src/Types.hpp"/>
+    <File Name="src/Core.cpp"/>
+    <File Name="src/Core.hpp"/>
+    <VirtualDirectory Name="DB">
+      <File Name="src/DB/Broker.cpp"/>
+      <File Name="src/DB/Broker.hpp"/>
+      <File Name="src/DB/Schema.cpp"/>
+      <File Name="src/DB/Schema.hpp"/>
+      <File Name="src/DB/Schema_Walker.cpp"/>
+      <File Name="src/DB/Schema_Walker.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="IO">
+      <File Name="src/IO/IO.cpp"/>
+      <File Name="src/IO/IO.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="Stages">
+      <File Name="src/Stages/Check.cpp"/>
+      <File Name="src/Stages/Check.hpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="" Assembler="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="clang( based on LLVM 3.5.2 )" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g -Wall" C_Options="" Assembler="" Required="no" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-O0" Required="no">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="Debug"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="$(IntermediateDirectory)/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="clang( based on LLVM 3.5.2 )" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g -Wall" C_Options="" Assembler="" Required="no" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-O0" Required="no">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="Debug"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="$(IntermediateDirectory)/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>

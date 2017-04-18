@@ -17,9 +17,9 @@ else()
     message( FATAL_ERROR "Incorrect type of build" )
 endif()
 
-set( CMAKE_CXX_COMPILER "/usr/bin/clang++" )
+set( CMAKE_CXX_COMPILER "/usr/bin/clang++-4.0" )
 set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe -fpic")
-set( CMAKE_CXX_FLAGS_RELEASE "-O2")
+set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto -s")
 set( CMAKE_CXX_FLAGS_DEBUG "-O0 -glldb -fstack-protector-all")
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -43,6 +43,6 @@ set(DB_UPDATE_SOURCE
     ${DB_UPDATE_SRC}/main.cpp
 )
 
-add_executable (main ${DB_UPDATE_SOURCE})
-target_link_libraries( main ${Boost_LIBRARIES} )
-target_link_libraries( main ${MYSQLCONNECTORCPP_LIBRARIES} )
+add_executable (db_update ${DB_UPDATE_SOURCE})
+target_link_libraries( db_update ${Boost_LIBRARIES} )
+target_link_libraries( db_update ${MYSQLCONNECTORCPP_LIBRARIES} )

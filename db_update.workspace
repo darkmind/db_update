@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="db_update" url="file:///home/asm/sources/db_update/" Database="" SWTLW="Yes">
+  <WorkspaceParserMacros/>
+  <WorkspaceParserPaths/>
+  <Project Name="db_update" Path="db_update.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="no">
+      <Environment/>
+      <Project Name="db_update" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="db_update" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
