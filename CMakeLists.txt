@@ -17,10 +17,14 @@ else()
     message( FATAL_ERROR "Incorrect type of build" )
 endif()
 
-set( CMAKE_CXX_COMPILER "/usr/bin/clang++-4.0" )
-set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe -fpic")
-set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto -s")
+set( CMAKE_CXX_COMPILER "clang++-4.0" )
+set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe")
+set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto")
 set( CMAKE_CXX_FLAGS_DEBUG "-O0 -glldb -fstack-protector-all")
+
+set( CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld -pie" )
+set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
+set( CMAKE_EXE_LINKER_FLAGS_DEBUG "" )
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
