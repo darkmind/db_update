@@ -23,7 +23,7 @@ IO::IO( std::shared_ptr<Broker> brokerref )
     broker = brokerref;
 }
 
-void IO::get_tables_schema( shared_ptr<Schema> schema, const unordered_map<string,string> args )
+void IO::get_tables_schema( shared_ptr<Schema> schema, const unordered_map<string,string>& args )
 {
     shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
         broker->get_connection()->prepareStatement(get_tables_sql) );

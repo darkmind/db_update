@@ -16,7 +16,7 @@ class IO
 public:
     explicit IO( std::shared_ptr<Broker> brokerref );
 
-    void get_tables_schema( std::shared_ptr<Schema> schema, std::unordered_map<std::string,std::string> args );
+    void get_tables_schema( std::shared_ptr<Schema> schema, const std::unordered_map<std::string,std::string>& args );
 
     void get_cols_for_tables( std::shared_ptr<Schema> schema );
 
@@ -27,7 +27,7 @@ private:
             "  AND ( ? IS NULL OR table_name = ? )"
             "  AND TABLE_TYPE='BASE TABLE' ORDER BY TABLE_NAME";
 
-    const std::string get_cols_sql = "SELECT c.COLUMN_NAME, c.COLUMN_DEFAULT, c.IS_NULLABLE,"
+    const std::string get_cols_sql = "SELECT c.COLUMN_NAME, c.ORDINAL_POSITION, c.COLUMN_DEFAULT, c.IS_NULLABLE,"
             " c.COLUMN_TYPE, c.EXTRA, c.CHARACTER_SET_NAME, c.COLLATION_NAME"
         " FROM information_schema.COLUMNS c"
         " INNER JOIN information_schema.TABLES t ON c.TABLE_NAME=t.TABLE_NAME"
@@ -35,7 +35,7 @@ private:
         " AND c.TABLE_SCHEMA=DATABASE()"
         " AND c.table_name = ?"
         " AND t.TABLE_SCHEMA=DATABASE()"
-        " ORDER BY c.TABLE_NAME, c.COLUMN_NAME";
+        " ORDER BY c.TABLE_NAME, c.COLUMN_NAME, c.ORDINAL_POSITION";
 
     std::shared_ptr<Broker> broker;
 

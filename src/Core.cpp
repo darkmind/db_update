@@ -7,14 +7,14 @@
 #include "DB/Schema.hpp"
 #include "IO/IO.hpp"
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <cppconn/resultset.h>
 #include <cppconn/resultset_metadata.h>
 #include <vector>
 
 using namespace std;
 
-Core::Core( const map<string, string>& options ) :
+Core::Core( const unordered_map<string, string>& options ) :
     broker( shared_ptr<Broker>( new Broker() ) ),
     schema( shared_ptr<Schema>( new Schema() ) )
 {

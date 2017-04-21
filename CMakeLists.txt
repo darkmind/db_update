@@ -22,8 +22,8 @@ set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe")
 set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto")
 set( CMAKE_CXX_FLAGS_DEBUG "-O0 -glldb -fstack-protector-all")
 
-set( CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld -pie" )
-set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
+set( CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld" )
+set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-pie -s" )
 set( CMAKE_EXE_LINKER_FLAGS_DEBUG "" )
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -37,16 +37,28 @@ include_directories(
     ${MYSQLCONNECTORCPP_INCLUDE_DIR}
 )
 
-set(DB_UPDATE_SOURCE
+set ( SHARED_SRC
     ${DB_UPDATE_SRC}/DB/Broker.cpp
     ${DB_UPDATE_SRC}/DB/Schema.cpp
-    ${DB_UPDATE_SRC}/DB/Schema_Walker.cpp
     ${DB_UPDATE_SRC}/IO/IO.cpp
     ${DB_UPDATE_SRC}/Core.cpp
+    ${DB_UPDATE_SRC}/DB/Schema_Walker.cpp
+)
+
+set( DB_UPDATE_SOURCE
     ${DB_UPDATE_SRC}/Stages/Check.cpp
     ${DB_UPDATE_SRC}/main.cpp
 )
 
-add_executable (db_update ${DB_UPDATE_SOURCE})
-target_link_libraries( db_update ${Boost_LIBRARIES} )
-target_link_libraries( db_update ${MYSQLCONNECTORCPP_LIBRARIES} )
+set( XML_DUMPER
+    ${DB_UPDATE_SRC}/utils/XML_Walker.cpp
+    ${DB_UPDATE_SRC}/dump_xml_schema.cpp
+)
+
+add_executable ( ${CMAKE_PROJECT_NAME} ${SHARED_SRC} ${DB_UPDATE_SOURCE} )
+target_link_libraries( ${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES} )
+target_link_libraries( ${CMAKE_PROJECT_NAME} ${MYSQLCONNECTORCPP_LIBRARIES} )
+
+add_executable ( dump_xml_schema ${SHARED_SRC} ${XML_DUMPER} )
+target_link_libraries( dump_xml_schema ${Boost_LIBRARIES} )
+target_link_libraries( dump_xml_schema ${MYSQLCONNECTORCPP_LIBRARIES} )

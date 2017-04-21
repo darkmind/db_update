@@ -5,7 +5,7 @@
 #include "Types.hpp"
 #include "DB/Broker.hpp"
 #include "IO/IO.hpp"
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -14,7 +14,7 @@
 class Core
 {
   public:
-    explicit Core( const std::map<std::string, std::string>& options );
+    explicit Core( const std::unordered_map<std::string, std::string>& options );
 
     mysql_rows execute( const std::string& statement );
 

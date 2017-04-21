@@ -58,6 +58,11 @@
       <File Name="src/Stages/Check.cpp"/>
       <File Name="src/Stages/Check.hpp"/>
     </VirtualDirectory>
+    <File Name="src/dump_xml_schema.cpp"/>
+    <VirtualDirectory Name="utils">
+      <File Name="src/utils/XML_Walker.hpp"/>
+      <File Name="src/utils/XML_Walker.cpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
