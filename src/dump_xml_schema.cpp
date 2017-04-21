@@ -11,12 +11,49 @@
 
 #include "Core.hpp"
 #include "Types.hpp"
-#include "utils/XML_Walker.hpp"
+//#include "utils/XML_Walker.hpp"
 
 
 using namespace std;
 namespace po = boost::program_options;
 namespace pt = boost::property_tree;
+
+
+void travel( const info& leaf_b, pt::ptree& xml_schema, const string& parent ) {
+    auto* col_leaf = boost::get<column_type>(&leaf_b);
+    if (col_leaf) {
+        travel( *col_leaf, xml_schema, parent );
+    }
+    else {
+        auto bs_leaf = boost::get<basic_type>(leaf_b);
+        travel( bs_leaf, xml_schema, parent );
+    }
+}
+void travel( const basic_type& leaf, pt::ptree& xml_schema, const string& parent ) {
+    for ( auto it : leaf ) {
+        string add_parent = parent + "." + it.first;
+        xml_schema.add( add_parent, it.second );
+    }
+}
+template< typename T, typename SCHEMA, typename PARENT >
+void travel( const T& leaf, SCHEMA& xml_schema, const PARENT& parent ) {
+    for ( auto it : leaf ) {
+        string add_parent;
+        if ( parent.empty() ) {
+            add_parent = it.first;
+        }
+        else {
+            add_parent = parent + "." + it.first;
+        }
+
+        travel( it.second, xml_schema, add_parent );
+    }
+}
+
+
+void populate_schema( const shared_ptr<schema_type> schema, pt::ptree& xml_schema ) {
+    travel( *schema, xml_schema, (string)"" );
+}
 
 
 int main( int ac, char* av[] )
@@ -56,7 +93,8 @@ int main( int ac, char* av[] )
     const shared_ptr<schema_type> schema = core->get_schema_ref()->get_schema();
 
     pt::ptree xml_schema;
-    XML_Walker::populate_schema( schema, xml_schema );
+    //XML_Walker::populate_schema( schema, xml_schema );
+    populate_schema( schema, xml_schema );
 
     try {
         pt::write_xml(
