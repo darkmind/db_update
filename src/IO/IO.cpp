@@ -3,7 +3,7 @@
 
 #include <IO/IO.hpp>
 #include <DB/Broker.hpp>
-#include <Types.hpp>
+#include <DB/Node.hpp>
 #include <DB/Schema.hpp>
 
 #include <string>
@@ -43,24 +43,28 @@ void IO::get_tables_schema( shared_ptr<Schema> schema, const unordered_map<strin
     sql::ResultSetMetaData* res_meta = result->getMetaData();
     const unsigned int c_num = res_meta->getColumnCount();
 
-    basic_type options;
-    string table_name;
+    shared_ptr<Node> table_info;
+    shared_ptr<Node> table_obj;
+
     string column_name;
 
     while ( result->next() ) {
+        table_info = shared_ptr<Node>( new Node("table_info") );
         for( unsigned int i = 1; i <= c_num; i++ ) {
             column_name = res_meta->getColumnName(i);
             if( column_name == "TABLE_NAME" ) {
-                table_name = result->getString(i);
+                table_obj = shared_ptr<Node>( new Node( result->getString(i) ) );
             }
             if( result->isNull(i) ) {
-                options[column_name] = "NULL";
+                table_info->add_data( column_name, "NULL" );
             } else {
-                options[column_name] = result->getString(i);
+                table_info->add_data( column_name, result->getString(i) );
             }
         }
-        table_property table_info = {{ "table_info", options }};
-        schema->add_table_info( table_name, table_info );
+        table_obj->add_child(table_info);
+        table_info->set_parent(table_obj);
+
+        schema->add_table_info(table_obj);
     }
 
     this->get_cols_for_tables(schema);
@@ -75,37 +79,36 @@ void IO::get_cols_for_tables( shared_ptr<Schema> schema ) {
         shared_ptr<sql::PreparedStatement> prep_stmt = shared_ptr<sql::PreparedStatement>(
             broker->get_connection()->prepareStatement(get_cols_sql) );
 
-        auto it = tables.begin();
-        while ( it != tables.end() ) {
-            prep_stmt->setString( 1, *it );
+        for ( auto it : tables ) {
+            prep_stmt->setString( 1, it );
             const unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(prep_stmt) );
             sql::ResultSetMetaData* res_meta        = result->getMetaData();
             const unsigned int c_num                = res_meta->getColumnCount();
 
-            string column_name;
+            shared_ptr<Node> table   = shared_ptr<Node>( new Node( it ) );
+            shared_ptr<Node> columns = shared_ptr<Node>( new Node("columns") );
+            table->add_child(columns);
+            columns->set_parent(table);
+
+            shared_ptr<Node> column;
             string col;
-            basic_type options;
-            column_type column;
-            table_property columns;
 
             while ( result->next() ) {
                 for( unsigned int i = 1; i <= c_num; i++ ) {
                     col = res_meta->getColumnName(i);
                     if( col == "COLUMN_NAME" ) {
-                        column_name = result->getString(i);
+                        column = shared_ptr<Node>( new Node( result->getString(i) ) );
+                        columns->add_child(column);
+                        column->set_parent(columns);
                     }
                     if(result->isNull(i)) {
-                        options[col] = "NULL";
+                        column->add_data( col, "NULL" );
                     } else {
-                        options[col] = result->getString(i);
+                        column->add_data( col, result->getString(i) );
                     }
                 }
-                column.insert( {{ column_name, options }} );
             }
-            columns.insert( {{ "columns", column }} );
-            schema->add_table_columns( *it, columns );
-
-            it++;
+            schema->add_table_columns(table);
         }
     }
 

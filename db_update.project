@@ -49,6 +49,8 @@
       <File Name="src/DB/Schema.hpp"/>
       <File Name="src/DB/Schema_Walker.cpp"/>
       <File Name="src/DB/Schema_Walker.hpp"/>
+      <File Name="src/DB/Node.hpp"/>
+      <File Name="src/DB/Node.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="IO">
       <File Name="src/IO/IO.cpp"/>
@@ -59,10 +61,6 @@
       <File Name="src/Stages/Check.hpp"/>
     </VirtualDirectory>
     <File Name="src/dump_xml_schema.cpp"/>
-    <VirtualDirectory Name="utils">
-      <File Name="src/utils/XML_Walker.hpp"/>
-      <File Name="src/utils/XML_Walker.cpp"/>
-    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -157,4 +155,6 @@
       </Completion>
     </Configuration>
   </Settings>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>

@@ -40,6 +40,7 @@ include_directories(
 set ( SHARED_SRC
     ${DB_UPDATE_SRC}/DB/Broker.cpp
     ${DB_UPDATE_SRC}/DB/Schema.cpp
+    ${DB_UPDATE_SRC}/DB/Node.cpp
     ${DB_UPDATE_SRC}/IO/IO.cpp
     ${DB_UPDATE_SRC}/Core.cpp
     ${DB_UPDATE_SRC}/DB/Schema_Walker.cpp
@@ -51,7 +52,6 @@ set( DB_UPDATE_SOURCE
 )
 
 set( XML_DUMPER
-    ${DB_UPDATE_SRC}/utils/XML_Walker.cpp
     ${DB_UPDATE_SRC}/dump_xml_schema.cpp
 )
 

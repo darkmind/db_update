@@ -4,11 +4,21 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <DB/Schema.hpp>
+#include "DB/Node.hpp"
+#include "DB/Schema.hpp"
+#include <boost/property_tree/ptree.hpp>
 
 class Check
 {
 public:
     static bool run( const std::shared_ptr<Schema> schema, const std::string& ref_schema_file );
+private:
+    static void check_schema(
+        const std::shared_ptr<Node> db_schema,
+        const boost::property_tree::ptree& ref_schema,
+        const std::string& parent,
+        bool& flag );
+
+    static std::size_t counter;
 };
 

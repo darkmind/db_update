@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Schema.hpp"
+#include "Node.hpp"
 #include "Schema_Walker.hpp"
 #include <string>
 #include <vector>
@@ -11,60 +12,75 @@
 
 using namespace std;
 
-Schema::Schema() : schema( shared_ptr<schema_type>( new schema_type ) )
+Schema::Schema() : schema( shared_ptr<Node>( new Node("schema") ) )
 {}
 
 void Schema::print_schema() {
     Schema_Walker::travel_schema(schema);
 }
 
-void Schema::add_table_columns( const string& table_name, const table_property& columns ) {
-    unordered_map<string, table_property> tbl = {{ table_name, columns }};
+void Schema::add_table_columns( const shared_ptr<Node> table ) {
+    shared_ptr<Node> tables = schema->get_child("tables");
+    if (! tables) {
+        tables = shared_ptr<Node>( new Node("tables") );
+        schema->add_child(tables);
+        tables->set_parent(schema);
+    }
 
-    auto tables = schema->find("tables");
-    if ( tables == schema->end() ) {
-        schema->insert( {{ "tables", tbl }} );
+    shared_ptr<Node> table_obj = tables->get_child( table->get_name() );
+    if (table_obj) {
+        shared_ptr<Node> table_info = table->get_child("columns");
+        table_obj->add_child(table_info);
+        table_info->set_parent(table_obj);
+
     }
     else {
-        auto table = tables->second.find(table_name);
-        if ( table != tables->second.end() ) {
-            info desc = columns.at("columns");
-            table->second.insert( {{ "columns", desc }} );
-        }
-        else {
-            tables->second.insert( {table_name, columns} );
-        }
+        tables->add_child(table);
     }
 
     return ;
 }
 
-void Schema::add_table_info( const string& table_name, const table_property& table_info ) {
-    auto tables = schema->find("tables");
-    if ( tables == schema->end() ) {
-        unordered_map<string, table_property> tbl = {{ table_name, table_info }};
-        schema->insert( {{ "tables", tbl }} );
+void Schema::add_table_info( const shared_ptr<Node> table ) {
+    shared_ptr<Node> tables = schema->get_child("tables");
+    if (! tables) {
+        tables = shared_ptr<Node>( new Node("tables") );
+        schema->add_child(tables);
+        tables->set_parent(schema);
+    }
+
+    shared_ptr<Node> table_obj = tables->get_child( table->get_name() );
+    if (table_obj) {
+        shared_ptr<Node> table_info = table->get_child("table_info");
+        table_obj->add_child(table_info);
+        table_info->set_parent(table_obj);
+
     }
     else {
-        tables->second.insert( {table_name, table_info} );
+        tables->add_child(table);
     }
 
     return ;
 }
 
 vector<string> Schema::get_tables_list() {
-    vector<string> tables;
+    vector<string> table_list;
 
-    for ( auto it : *schema ) {
-        for ( auto& tbls : it.second ) {
-            tables.push_back(tbls.first);
-        }
+    shared_ptr<Node> tables = schema->get_child("tables");
+    if (! tables) {
+        tables = shared_ptr<Node>( new Node("tables") );
+        schema->add_child(tables);
+        tables->set_parent(schema);
     }
 
-    return tables;
+    for ( auto it : tables->get_children() ) {
+        table_list.push_back( it.first );
+    }
+
+    return table_list;
 }
 
-shared_ptr<schema_type> Schema::get_schema()
+shared_ptr<Node> Schema::get_schema()
 {
     return schema;
 }

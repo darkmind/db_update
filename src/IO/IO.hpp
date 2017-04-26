@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <DB/Broker.hpp>
 #include <DB/Schema.hpp>
-#include <Types.hpp>
 #include <cppconn/resultset.h>
 
 

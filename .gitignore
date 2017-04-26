@@ -10,4 +10,5 @@ db_update.mk
 xz.cpp
 xz.o
 xz.s
+tests
 

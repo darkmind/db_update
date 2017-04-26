@@ -1,9 +1,12 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 
 #pragma once
 #include <memory>
-#include <Types.hpp>
+#include "Node.hpp"
 
 class Schema_Walker
 {
@@ -12,12 +15,7 @@ public:
 
     ~Schema_Walker();
 
-    static void travel_schema( const std::shared_ptr<schema_type> schema );
-
-    template< typename T >
-    static void travel( T leaf );
-    static void travel( info leaf_b );
-    static void travel( basic_type leaf );
+    static void travel_schema( const std::shared_ptr<Node> schema );
 
 private:
     static std::size_t counter;

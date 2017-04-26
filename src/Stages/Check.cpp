@@ -2,15 +2,17 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Check.hpp"
-#include <Types.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+#include "DB/Node.hpp"
 #include <memory>
 #include <string>
 #include <iostream>
 
 using namespace std;
 namespace pt = boost::property_tree;
+
+size_t Check::counter = 0;
 
 bool Check::run( const shared_ptr<Schema> schema, const string& ref_schema_file ) {
 
@@ -26,39 +28,51 @@ bool Check::run( const shared_ptr<Schema> schema, const string& ref_schema_file 
     }
 
     bool flag = true;
-    string attr_file_val = "";
     auto db_schema = schema->get_schema();
-    for ( auto it : *db_schema ) {
-        if ( it.first == "tables" ) {
-            cout << "Checking tables" << endl;
-            for ( auto& tbl : it.second ) {
-                cout << "checking table: " << tbl.first << endl;
-                for ( auto& tbl_props : tbl.second ) {
-                    if ( tbl_props.first == "table_info" ) {
-                        auto& tbl_info = boost::get<basic_type>( tbl_props.second );
+    Check::check_schema( db_schema, ref_schema, "schema", flag );
 
-                        for ( auto& tbl_attr : tbl_info ) {
-                            cout << "  checking attribute: " << tbl_attr.first;
-                            try {
-                                attr_file_val = ref_schema.get<string>( "tables." + tbl.first + ".table_info." + tbl_attr.first );
-                            }
-                            catch ( const exception& ex ) {
-                                cout << endl << "    attribute " << tbl_attr.first << " is missing in ref file" << endl;
-                                continue;
-                            }
-                            if ( tbl_attr.second == attr_file_val ) {
-                                cout << " Equal: " << attr_file_val << endl;
-                            }
-                            else {
-                                cout << " Not Equal. File: " << attr_file_val << " Schema: " << tbl_attr.second << endl;
-                                flag = false;
-                            }
-                        }
-                    }
-                }
+    return flag;
+}
+
+void Check::check_schema( const shared_ptr<Node> db_schema, const pt::ptree& ref_schema, const string& parent, bool& flag ) {
+    string add_parent;
+    cout << string( Check::counter, ' ' ) << "Checking " << db_schema->get_name() << endl;
+    Check::counter++;
+
+    if ( db_schema->has_children() ) {
+        for ( auto child : db_schema->get_children() ) {
+            if ( parent.empty() ) {
+                add_parent = child.first;
+            }
+            else {
+                add_parent = parent + "." + child.first;
+            }
+            check_schema( child.second, ref_schema, add_parent, flag );
+        }
+    }
+    else {
+        for ( auto data : db_schema->get_data() ) {
+            cout << string( Check::counter, ' ' ) << "Checking " << data.first;
+            add_parent = parent + "." + data.first;
+
+            string attr_file_val;
+            try {
+                attr_file_val = ref_schema.get<string>(add_parent);
+            }
+            catch ( const exception& ex ) {
+                cout << " Attribute " << add_parent << " is missing in ref file" << endl;
+                flag = false;
+                continue;
+            }
+
+            if ( data.second == attr_file_val ) {
+                cout << " Equal: " << attr_file_val << endl;
+            }
+            else {
+                cout << " Not Equal. File: " << attr_file_val << " Schema: " << data.second << endl;
+                flag = false;
             }
         }
     }
-
-    return flag;
+    Check::counter--;
 }

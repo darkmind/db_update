@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include <Types.hpp>
+#include "Node.hpp"
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #include <string>
 
 class Schema
@@ -16,15 +17,15 @@ public:
 
     void print_schema();
 
-    void add_table_columns( const std::string& table_name, const table_property& columns );
+    void add_table_columns( const std::shared_ptr<Node> table );
 
-    void add_table_info( const std::string& table_name, const table_property& table_info );
+    void add_table_info( const std::shared_ptr<Node> table );
 
     std::vector<std::string> get_tables_list();
 
-    std::shared_ptr<schema_type> get_schema();
+    std::shared_ptr<Node> get_schema();
 
 private:
-    std::shared_ptr<schema_type> schema;
+    std::shared_ptr<Node> schema;
 };
 
