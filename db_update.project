@@ -25,43 +25,66 @@
   "enabled": true,
   "buildDirectory": "$(IntermediateDirectory)",
   "sourceDirectory": "$(ProjectPath)",
-  "generator": "Unix Makefiles",
+  "generator": "",
   "buildType": "Release",
-  "arguments": ["-DCMAKE_EXPORT_COMPILE_COMMANDS=On"],
+  "arguments": [" -DCMAKE_EXPORT_COMPILE_COMMANDS=On"],
   "parentProject": ""
  }]]]>
     </Plugin>
   </Plugins>
+  <Reconciliation>
+    <Regexes/>
+    <Excludepaths>
+      <Path>cmake/</Path>
+      <Path>CMakeFiles/</Path>
+      <Path>Debug/</Path>
+      <Path>Release/</Path>
+      <Path>tests/</Path>
+    </Excludepaths>
+    <Ignorefiles/>
+    <Extensions>
+      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+    </Extensions>
+    <Topleveldir>../db_update</Topleveldir>
+  </Reconciliation>
   <Description/>
   <Dependencies/>
-  <VirtualDirectory Name="resources">
-    <File Name="CMakeLists.txt"/>
-  </VirtualDirectory>
+  <VirtualDirectory Name="resources"/>
   <VirtualDirectory Name="src">
-    <File Name="src/main.cpp"/>
     <File Name="src/Types.hpp"/>
     <File Name="src/Core.cpp"/>
     <File Name="src/Core.hpp"/>
-    <VirtualDirectory Name="DB">
-      <File Name="src/DB/Broker.cpp"/>
-      <File Name="src/DB/Broker.hpp"/>
-      <File Name="src/DB/Schema.cpp"/>
-      <File Name="src/DB/Schema.hpp"/>
-      <File Name="src/DB/Schema_Walker.cpp"/>
-      <File Name="src/DB/Schema_Walker.hpp"/>
-      <File Name="src/DB/Node.hpp"/>
-      <File Name="src/DB/Node.cpp"/>
+    <VirtualDirectory Name="Stage">
+      <File Name="src/Stage/Check.cpp"/>
+      <File Name="src/Stage/Check.hpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="IO">
-      <File Name="src/IO/IO.cpp"/>
-      <File Name="src/IO/IO.hpp"/>
+    <File Name="CMakeLists.txt"/>
+    <File Name="src/Stage.hpp"/>
+    <VirtualDirectory Name="Schema">
+      <VirtualDirectory Name="DB">
+        <File Name="src/Schema/DB/Broker.cpp"/>
+        <File Name="src/Schema/DB/Broker.hpp"/>
+        <File Name="src/Schema/DB/IO.cpp"/>
+        <File Name="src/Schema/DB/IO.hpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="File">
+        <File Name="src/Schema/File/XML_Handler.hpp"/>
+        <File Name="src/Schema/File/XML_Handler.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Tree">
+        <File Name="src/Schema/Tree/Node.cpp"/>
+        <File Name="src/Schema/Tree/Node.hpp"/>
+        <File Name="src/Schema/Tree/Tree.cpp"/>
+        <File Name="src/Schema/Tree/Tree.hpp"/>
+      </VirtualDirectory>
+      <File Name="src/Schema/Reader.hpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="Stages">
-      <File Name="src/Stages/Check.cpp"/>
-      <File Name="src/Stages/Check.hpp"/>
-    </VirtualDirectory>
-    <File Name="src/dump_xml_schema.cpp"/>
+    <File Name="src/main.cpp"/>
+    <File Name="src/Schema.cpp"/>
+    <File Name="src/Schema.hpp"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -155,6 +178,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
 </CodeLite_Project>

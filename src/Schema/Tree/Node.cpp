@@ -2,23 +2,22 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Node.hpp"
+
 #include <string>
 #include <utility>
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <memory>
+#include <vector>
+#include <regex>
 
 using namespace std;
 
-Node::Node( const string& name ) : node_name(name)
-{
-}
+Node::Node( const string& name ) : node_name(name) {}
 
-Node::~Node()
-{
-}
+Node::~Node() {}
 
-string Node::get_name() {
+string Node::get_name() const {
     return node_name;
 }
 
@@ -27,25 +26,25 @@ void Node::set_parent( const shared_ptr<Node> parent_node ) {
 }
 
 
-shared_ptr<Node> Node::get_parent() {
+shared_ptr<Node> Node::get_parent() const {
     return shared_ptr<Node>(parent);
 }
 
 void Node::add_child( const shared_ptr<Node> node ) {
-    children.insert( make_pair( node->get_name(), node ) );
+    children.push_back(node);
 }
 
-shared_ptr<Node> Node::get_child( const string& name ) {
-    auto result = children.find(name);
-    if ( result != children.end() ) {
-        return result->second;
+shared_ptr<Node> Node::get_child( const string& name ) const {
+    regex re( "^" + name + "$" );
+    for ( const auto it : children ) {
+        if ( regex_match( it->get_name(), re ) ) {
+            return it;
+        }
     }
-    else {
-        return nullptr;
-    }
+    return nullptr;
 }
 
-unordered_map<string, shared_ptr<Node>> Node::get_children() {
+vector<shared_ptr<Node>> Node::get_children() const {
     return children;
 }
 
@@ -53,11 +52,15 @@ void Node::add_data( const string& key, const string& value ) {
     data.insert( make_pair( key, value ) );
 }
 
-map<string, string> Node::get_data() {
+void Node::set_data( const unordered_map<string, string>& in_data ) {
+    data = in_data;
+}
+
+unordered_map<string, string> Node::get_data() const {
     return data;
 }
 
-bool Node::has_children() {
+bool Node::has_children() const {
     if ( children.size() > 0 ) {
         return true;
     }

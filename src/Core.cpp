@@ -3,52 +3,28 @@
 
 #include "Core.hpp"
 #include "Types.hpp"
-#include "DB/Broker.hpp"
-#include "DB/Schema.hpp"
-#include "IO/IO.hpp"
+#include "Schema.hpp"
 #include <memory>
 #include <unordered_map>
-#include <cppconn/resultset.h>
-#include <cppconn/resultset_metadata.h>
 #include <vector>
 
 using namespace std;
 
-Core::Core( const unordered_map<string, string>& options ) :
-    broker( shared_ptr<Broker>( new Broker() ) ),
-    schema( shared_ptr<Schema>( new Schema() ) )
-{
-    broker->connect(options.at("host"), options.at("db"), options.at("user"), options.at("pass"));
-    io = shared_ptr<IO>( new IO(broker) );
-}
+Core::Core( const unordered_map<string, string>& in_options ) :
+    schema_db( shared_ptr<Schema>( new Schema( in_options, "db" ) ) ),
+    schema_file( shared_ptr<Schema>( new Schema( in_options, "file" ) ) ),
+    options(in_options)
+{}
 
 mysql_rows Core::execute( const string& statement )
 {
-    const unique_ptr<sql::ResultSet> result = unique_ptr<sql::ResultSet>( broker->execute(statement) );
-    sql::ResultSetMetaData* res_meta        = result->getMetaData();
-    const unsigned int c_num                = res_meta->getColumnCount();
-    mysql_rows records;
-    while ( result->next() ) {
-        vector<string> record_row;
-        for( unsigned int i = 1; i <= c_num; i++ ) {
-            if(result->isNull(i)) {
-                record_row.push_back("NULL");
-            } else {
-                record_row.push_back( result->getString(i) );
-            }
-        }
-        records.push_back(record_row);
-    }
-
-    return records;
+    return schema_db->execute_direct_sql(statement);
 }
 
-void Core::get_schema( const string& table_name )
+bool Core::run_check() const
 {
-    unordered_map<string, string> args = {{ "table_name", table_name }};
-    io->get_tables_schema( schema, args );
+    return true;
 }
 
-shared_ptr<Schema> Core::get_schema_ref() {
-    return schema;
-}
+void Core::print_schema() const {}
+

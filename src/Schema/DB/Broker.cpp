@@ -1,12 +1,16 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include "DB/Broker.hpp"
+#include "Schema/DB/Broker.hpp"
+
 #include <vector>
 #include <array>
 #include <string>
+#include <unordered_map>
 #include <sstream>
 #include <memory>
+#include <stdexcept>
+
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -16,6 +20,12 @@
 #include <cppconn/datatype.h>
 
 using namespace std;
+
+Broker::Broker( const unordered_map<string, string>& options )
+{
+    connect( options.at("host"), options.at("db"), options.at("user"), options.at("pass") );
+}
+
 
 sql::ResultSet* Broker::execute( const string& statement )
 {
@@ -96,9 +106,6 @@ shared_ptr<sql::Connection> Broker::get_connection()
 {
     return connection;
 }
-
-Broker::Broker()
-{}
 
 Broker::~Broker()
 {

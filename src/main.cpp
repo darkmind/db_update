@@ -3,8 +3,6 @@
 
 #include "Core.hpp"
 #include "Types.hpp"
-#include "DB/Schema.hpp"
-#include "Stages/Check.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <unordered_map>
@@ -22,11 +20,12 @@ int main( int ac, char* av[] )
         ("db", po::value<string>()->default_value("test"), "name of the schema")
         ("user", po::value<string>()->default_value("root"), "db user")
         ("pass", po::value<string>()->default_value(""), "db password")
-        ("query", po::value<string>()->default_value(""), "query to run")
-        ("table_name", po::value<string>()->default_value(""), "get schema of table")
         ("print_schema", "print schema to output")
         ("check", "run check of schema")
-        ("source_file", po::value<string>()->default_value("schema.xml"), "file with xml schema");
+        ("dump", "dump schema to xml file specified in --source_file option")
+        ("source_file", po::value<string>()->default_value("schema.xml"), "file with xml schema")
+        ("query", po::value<string>()->default_value(""), "query to run")
+        ("table_name", po::value<string>()->default_value(""), "get schema of table");
     po::variables_map vm;
     try {
         po::store( po::parse_command_line(ac, av, desc), vm );
@@ -42,32 +41,37 @@ int main( int ac, char* av[] )
         return 1;
     }
 
+    if ( vm.count("check") && vm.count("dump") ) {
+        cout << "--check and --dump are mutually excluding. Please specify the command" << endl;
+        cout << desc << endl;
+        return 0;
+    }
+
     const unordered_map<string, string> options = {
-        {"host", vm["host"].as<string>()}, {"user", vm["user"].as<string>()},
+        {"host", vm["host"].as<string>()},
+        {"user", vm["user"].as<string>()},
         {"pass", vm["pass"].as<string>()},
         {"db", vm["db"].as<string>()},
     };
 
-    shared_ptr<Core> core = shared_ptr<Core>( new Core(options) );
+    Core core{options};
+
     if (! vm["query"].as<string>().empty() ) {
-        const mysql_rows records = core->execute( vm["query"].as<string>() );
-        for(auto& row : records) {
-            for(auto& val : row) {
+        const mysql_rows records = core.execute( vm["query"].as<string>() );
+        for( auto& row : records ) {
+            for( auto& val : row ) {
                 cout << "'" << val << "' ";
             }
             cout << endl;
         }
     }
 
-    core->get_schema( vm["table_name"].as<string>() );
-    shared_ptr<Schema> schema = core->get_schema_ref();
-
     if ( vm.count("print_schema") ) {
-        schema->print_schema();
+        core.print_schema();
     }
 
     if ( vm.count("check") ) {
-        if ( ! Check::run( schema, vm["source_file"].as<string>() ) ) {
+        if ( ! core.run_check()  ) {
             cout << "Check is failed, see datails above" << endl;
             return 1;
         }

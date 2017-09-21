@@ -37,28 +37,18 @@ include_directories(
     ${MYSQLCONNECTORCPP_INCLUDE_DIR}
 )
 
-set ( SHARED_SRC
-    ${DB_UPDATE_SRC}/DB/Broker.cpp
-    ${DB_UPDATE_SRC}/DB/Schema.cpp
-    ${DB_UPDATE_SRC}/DB/Node.cpp
-    ${DB_UPDATE_SRC}/IO/IO.cpp
-    ${DB_UPDATE_SRC}/Core.cpp
-    ${DB_UPDATE_SRC}/DB/Schema_Walker.cpp
-)
-
 set( DB_UPDATE_SOURCE
-    ${DB_UPDATE_SRC}/Stages/Check.cpp
     ${DB_UPDATE_SRC}/main.cpp
+    ${DB_UPDATE_SRC}/Core.cpp
+    ${DB_UPDATE_SRC}/Stage/Check.cpp
+    ${DB_UPDATE_SRC}/Schema.cpp
+    ${DB_UPDATE_SRC}/Schema/DB/IO.cpp
+    ${DB_UPDATE_SRC}/Schema/DB/Broker.cpp
+    ${DB_UPDATE_SRC}/Schema/File/XML_Handler.cpp
+    ${DB_UPDATE_SRC}/Schema/Tree/Tree.cpp
+    ${DB_UPDATE_SRC}/Schema/Tree/Node.cpp
 )
 
-set( XML_DUMPER
-    ${DB_UPDATE_SRC}/dump_xml_schema.cpp
-)
-
-add_executable ( ${CMAKE_PROJECT_NAME} ${SHARED_SRC} ${DB_UPDATE_SOURCE} )
+add_executable ( ${CMAKE_PROJECT_NAME} ${DB_UPDATE_SOURCE} )
 target_link_libraries( ${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES} )
 target_link_libraries( ${CMAKE_PROJECT_NAME} ${MYSQLCONNECTORCPP_LIBRARIES} )
-
-add_executable ( dump_xml_schema ${SHARED_SRC} ${XML_DUMPER} )
-target_link_libraries( dump_xml_schema ${Boost_LIBRARIES} )
-target_link_libraries( dump_xml_schema ${MYSQLCONNECTORCPP_LIBRARIES} )

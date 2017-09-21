@@ -3,8 +3,7 @@
 
 #pragma once
 #include "Types.hpp"
-#include "DB/Broker.hpp"
-#include "IO/IO.hpp"
+#include "Schema.hpp"
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -14,16 +13,18 @@
 class Core
 {
   public:
-    explicit Core( const std::unordered_map<std::string, std::string>& options );
+    explicit Core( const std::unordered_map<std::string, std::string>& in_options );
 
     mysql_rows execute( const std::string& statement );
 
-    void get_schema( const std::string& table_name );
+    bool run_check() const;
 
-    std::shared_ptr<Schema> get_schema_ref();
+    void print_schema() const;
 
   private:
-    std::shared_ptr<Broker> broker;
-    std::shared_ptr<IO> io;
-    std::shared_ptr<Schema> schema;
+    std::shared_ptr<Schema> schema_db;
+
+    std::shared_ptr<Schema> schema_file;
+
+    std::unordered_map<std::string, std::string> options;
 };
