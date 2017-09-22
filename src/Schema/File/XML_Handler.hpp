@@ -7,11 +7,12 @@
 #include "Schema/Reader.hpp"
 
 #include <string>
+#include <unordered_map>
 
 class XML_Handler : public Reader
 {
 public:
-    XML_Handler();
+    explicit XML_Handler( const std::unordered_map<std::string, std::string>& options );
     ~XML_Handler();
 
     void get_table() const override;

@@ -18,9 +18,9 @@ else()
 endif()
 
 set( CMAKE_CXX_COMPILER "clang++-4.0" )
-set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -pipe")
+set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14")
 set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto")
-set( CMAKE_CXX_FLAGS_DEBUG "-O0 -glldb -fstack-protector-all")
+set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 
 set( CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld" )
 set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-pie -s" )

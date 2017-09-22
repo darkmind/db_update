@@ -19,7 +19,7 @@ using namespace std;
 
 IO::IO( const unordered_map<string, string>& options )
 {
-    broker = shared_ptr<Broker>( new Broker(options) );
+    broker = unique_ptr<Broker>( new Broker(options) );
 }
 
 mysql_rows IO::execute ( const std::string& statement ) const

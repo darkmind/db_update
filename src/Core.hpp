@@ -22,9 +22,9 @@ class Core
     void print_schema() const;
 
   private:
-    std::shared_ptr<Schema> schema_db;
+    std::unique_ptr<Schema> schema_db;
 
-    std::shared_ptr<Schema> schema_file;
+    std::unique_ptr<Schema> schema_file;
 
     std::unordered_map<std::string, std::string> options;
 };

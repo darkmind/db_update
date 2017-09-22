@@ -11,10 +11,11 @@
 using namespace std;
 
 Core::Core( const unordered_map<string, string>& in_options ) :
-    schema_db( shared_ptr<Schema>( new Schema( in_options, "db" ) ) ),
-    schema_file( shared_ptr<Schema>( new Schema( in_options, "file" ) ) ),
+    schema_db( unique_ptr<Schema>( new Schema( in_options, 1 ) ) ), // 1 - db
+    schema_file( unique_ptr<Schema>( new Schema( in_options, 2 ) ) ), // 2 - file
     options(in_options)
-{}
+{
+}
 
 mysql_rows Core::execute( const string& statement )
 {

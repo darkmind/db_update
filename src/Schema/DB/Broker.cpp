@@ -89,7 +89,7 @@ void Broker::connect( const string host, const string db, const string user, con
         driver = get_driver_instance();
         ostringstream dsn;
         dsn << "tcp://" << host << ":3306";
-        connection = shared_ptr<sql::Connection>( driver->connect( dsn.str(), user, password ) );
+        connection = unique_ptr<sql::Connection>( driver->connect( dsn.str(), user, password ) );
         connection->setSchema(db);
     }
     catch (sql::SQLException &e) {
@@ -102,10 +102,6 @@ void Broker::connect( const string host, const string db, const string user, con
     }
 }
 
-shared_ptr<sql::Connection> Broker::get_connection()
-{
-    return connection;
-}
 
 Broker::~Broker()
 {

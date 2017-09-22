@@ -9,7 +9,7 @@
 
 using namespace std;
 
-XML_Handler::XML_Handler()
+XML_Handler::XML_Handler( const unordered_map<string, string>& options )
 {
 }
 

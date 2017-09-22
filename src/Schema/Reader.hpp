@@ -10,6 +10,7 @@
 class Reader
 {
 public:
+    Reader(){}
 
     virtual void get_table() const = 0;
 
@@ -18,5 +19,7 @@ public:
     virtual void get_index() const = 0;
 
     virtual mysql_rows execute( const std::string& statement ) const = 0;
+
+    virtual ~Reader(){}
 };
 

@@ -21,7 +21,7 @@ class Schema
 
 public:
 
-    Schema( const std::unordered_map<std::string, std::string>& options, const std::string& location );
+    Schema( const std::unordered_map<std::string, std::string>& options, const int& location );
 
     mysql_rows execute_direct_sql( const std::string& statement ) const;
 
@@ -46,8 +46,8 @@ private:
 
     void read_schema();
 
-    std::shared_ptr<Tree> tree;
+    std::unique_ptr<Tree> tree;
 
-    std::shared_ptr<Reader> io;
+    std::unique_ptr<Reader> io;
 };
 

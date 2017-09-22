@@ -15,12 +15,13 @@
 
 using namespace std;
 
-Schema::Schema( const unordered_map<string, string>& options, const string& location )
+Schema::Schema( const unordered_map<string, string>& options, const int& location )
 {
-    if ( location.compare("db") ) {
-        //shared_ptr<IO> shared_io = shared_ptr<IO>( new IO(options) );
-        //io = static_pointer_cast<Reader>(shared_io);
-        io = shared_ptr<Reader>( new IO(options) );
+    if ( location == 1 ) {
+        io = unique_ptr<Reader>( new IO(options) );
+    }
+    else if ( location == 2 ) {
+        io = unique_ptr<Reader>( new XML_Handler(options) );
     }
 }
 

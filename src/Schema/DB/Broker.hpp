@@ -17,7 +17,7 @@
 class Broker
 {
 public:
-    Broker( const std::unordered_map<std::string, std::string>& options );
+    explicit Broker( const std::unordered_map<std::string, std::string>& options );
 
     ~Broker();
 
@@ -26,8 +26,6 @@ public:
     sql::ResultSet* execute( sql::PreparedStatement* statement );
 
     sql::ResultSet* execute( std::shared_ptr<sql::PreparedStatement> statement );
-
-    std::shared_ptr<sql::Connection> get_connection();
 
     void connect( std::string host,
                  std::string db,
@@ -39,5 +37,5 @@ public:
   private:
     sql::Driver *driver;
 
-    std::shared_ptr<sql::Connection> connection;
+    std::unique_ptr<sql::Connection> connection;
 };

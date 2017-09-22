@@ -43,7 +43,7 @@ private:
         " AND t.table_schema = DATABASE()"
         " ORDER BY c.table_name, c.column_name, c.ordinal_position";
 
-    std::shared_ptr<Broker> broker;
+    std::unique_ptr<Broker> broker;
 
 };
 
