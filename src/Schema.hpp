@@ -9,19 +9,20 @@
 #include "Schema/Tree/Node.hpp"
 #include "Schema/DB/IO.hpp"
 #include "Schema/DB/Broker.hpp"
-#include "Schema/File/XML_Handler.hpp"
+#include "Schema/File/File_Handler.hpp"
 
 #include <unordered_map>
 #include <memory>
 #include <vector>
 #include <string>
 
+template <class READER_T>
 class Schema
 {
 
 public:
 
-    Schema( const std::unordered_map<std::string, std::string>& options, const int& location );
+    Schema( const std::unordered_map<std::string, std::string>& options );
 
     mysql_rows execute_direct_sql( const std::string& statement ) const;
 
@@ -35,19 +36,18 @@ public:
     void get_index( const std::string& table_name, const std::string& index_name ) const;
 
     void add_table( const std::shared_ptr<Node> table ) const;
-
     void add_column( const std::string& table_name, const std::shared_ptr<Node> column ) const;
-
     void add_index( const std::string& table_name, const std::shared_ptr<Node> index ) const;
+
+    std::shared_ptr<Tree> get_tree() const;
+    void set_tree( std::shared_ptr<Tree> tree );
+
+    void read_schema();
 
     void dump_schema() const;
 
 private:
 
-    void read_schema();
-
-    std::unique_ptr<Tree> tree;
-
-    std::unique_ptr<Reader> io;
+    std::shared_ptr<READER_T> io;
 };
 

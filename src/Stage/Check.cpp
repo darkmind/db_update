@@ -2,11 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Stage/Check.hpp"
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
 
 using namespace std;
-namespace pt = boost::property_tree;
 
 Check::Check() :
     success(true)

@@ -32,10 +32,12 @@ public:
                  std::string user,
                  std::string password );
 
+    std::shared_ptr<sql::Connection> get_connection();
+
     void clean();
 
   private:
     sql::Driver *driver;
 
-    std::unique_ptr<sql::Connection> connection;
+    std::shared_ptr<sql::Connection> connection;
 };

@@ -12,19 +12,25 @@
 
 class Core
 {
-  public:
+public:
+
     explicit Core( const std::unordered_map<std::string, std::string>& in_options );
 
     mysql_rows execute( const std::string& statement );
 
     bool run_check() const;
 
+    void dump_schema() const;
+
     void print_schema() const;
 
-  private:
-    std::unique_ptr<Schema> schema_db;
+    void test_method();
 
-    std::unique_ptr<Schema> schema_file;
+private:
+
+    std::unique_ptr<Schema<IO>> schema_db;
+
+    std::unique_ptr<Schema<File_Handler>> schema_file;
 
     std::unordered_map<std::string, std::string> options;
 };

@@ -4,7 +4,7 @@
 #include "Types.hpp"
 #include "Schema.hpp"
 #include "Schema/DB/IO.hpp"
-#include "Schema/File/XML_Handler.hpp"
+#include "Schema/File/File_Handler.hpp"
 #include "Schema/Tree/Tree.hpp"
 #include "Schema/Tree/Node.hpp"
 #include <string>
@@ -15,44 +15,75 @@
 
 using namespace std;
 
-Schema::Schema( const unordered_map<string, string>& options, const int& location )
+template <class READER_T>
+Schema<READER_T>::Schema( const unordered_map<string, string>& options )
 {
-    if ( location == 1 ) {
-        io = unique_ptr<Reader>( new IO(options) );
-    }
-    else if ( location == 2 ) {
-        io = unique_ptr<Reader>( new XML_Handler(options) );
-    }
+    io = unique_ptr<READER_T>( new READER_T(options) );
 }
 
-mysql_rows Schema::execute_direct_sql ( const std::string& statement ) const
+template <class READER_T>
+mysql_rows Schema<READER_T>::execute_direct_sql ( const std::string& statement ) const
 {
     return io->execute(statement);
 }
 
-void Schema::get_table() const
-{}
-void Schema::get_table( const std::string& table_name ) const
-{}
-
-void Schema::get_column( const std::string& table_name ) const
-{}
-void Schema::get_column( const std::string& table_name, const std::string& column_name ) const
+template <class READER_T>
+void Schema<READER_T>::get_table() const
 {}
 
-void Schema::get_index( const std::string& table_name ) const
-{}
-void Schema::get_index( const std::string& table_name, const std::string& index_name ) const
-{}
-
-void Schema::add_table( const std::shared_ptr<Node> table ) const
+template <class READER_T>
+void Schema<READER_T>::get_table( const std::string& table_name ) const
 {}
 
-void Schema::add_column( const std::string& table_name, const std::shared_ptr<Node> column ) const
+template <class READER_T>
+void Schema<READER_T>::get_column( const std::string& table_name ) const
+{}
+template <class READER_T>
+void Schema<READER_T>::get_column( const std::string& table_name, const std::string& column_name ) const
 {}
 
-void Schema::add_index( const std::string& table_name, const std::shared_ptr<Node> index ) const
+template <class READER_T>
+void Schema<READER_T>::get_index( const std::string& table_name ) const
+{}
+template <class READER_T>
+void Schema<READER_T>::get_index( const std::string& table_name, const std::string& index_name ) const
 {}
 
-void Schema::dump_schema() const
+template <class READER_T>
+void Schema<READER_T>::add_table( const std::shared_ptr<Node> table ) const
 {}
+
+template <class READER_T>
+void Schema<READER_T>::add_column( const std::string& table_name, const std::shared_ptr<Node> column ) const
+{}
+
+template <class READER_T>
+void Schema<READER_T>::add_index( const std::string& table_name, const std::shared_ptr<Node> index ) const
+{}
+
+template <class READER_T>
+void Schema<READER_T>::dump_schema() const
+{
+    io->dump_schema();
+}
+
+template <class READER_T>
+void Schema<READER_T>::read_schema()
+{
+    io->read_schema();
+}
+
+template <class READER_T>
+std::shared_ptr<Tree> Schema<READER_T>::get_tree() const
+{
+    return io->get_tree();
+}
+
+template <class READER_T>
+void Schema<READER_T>::set_tree( shared_ptr<Tree> tree )
+{
+    io->set_tree(tree);
+}
+
+template class Schema<IO>;
+template class Schema<File_Handler>;

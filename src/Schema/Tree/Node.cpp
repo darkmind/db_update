@@ -10,10 +10,16 @@
 #include <memory>
 #include <vector>
 #include <regex>
+#include <iostream>
 
 using namespace std;
 
-Node::Node( const string& name ) : node_name(name) {}
+Node::Node( const string& name ) : node_name(name)
+{
+    if ( name == "" ) {
+        throw runtime_error("Node can't have empty name.");
+    }
+}
 
 Node::~Node() {}
 
@@ -58,6 +64,14 @@ void Node::set_data( const unordered_map<string, string>& in_data ) {
 
 unordered_map<string, string> Node::get_data() const {
     return data;
+}
+
+void Node::set_type( const string& i_type ) {
+    type = i_type;
+}
+
+string Node::get_type() const {
+    return type;
 }
 
 bool Node::has_children() const {

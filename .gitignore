@@ -11,4 +11,5 @@ xz.cpp
 xz.o
 xz.s
 tests
-
+cmake*
+schema.json

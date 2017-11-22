@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="db_update" InternalType="Console">
+<CodeLite_Project Name="db_update" InternalType="Console" Version="10.0.0">
   <Plugins>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
@@ -68,8 +68,8 @@
         <File Name="src/Schema/DB/IO.hpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="File">
-        <File Name="src/Schema/File/XML_Handler.hpp"/>
-        <File Name="src/Schema/File/XML_Handler.cpp"/>
+        <File Name="src/Schema/File/File_Handler.hpp"/>
+        <File Name="src/Schema/File/File_Handler.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Tree">
         <File Name="src/Schema/Tree/Node.cpp"/>
@@ -78,6 +78,7 @@
         <File Name="src/Schema/Tree/Tree.hpp"/>
       </VirtualDirectory>
       <File Name="src/Schema/Reader.hpp"/>
+      <File Name="src/Schema/Reader.cpp"/>
     </VirtualDirectory>
     <File Name="src/main.cpp"/>
     <File Name="src/Schema.cpp"/>
@@ -95,7 +96,7 @@
       </Linker>
       <ResourceCompiler Options=""/>
     </GlobalSettings>
-    <Configuration Name="Debug" CompilerType="clang( based on LLVM 3.5.2 )" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+    <Configuration Name="Debug" CompilerType="GCC ( 4.8 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g -Wall" C_Options="" Assembler="" Required="no" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
       </Compiler>
@@ -136,7 +137,7 @@
         <SearchPaths/>
       </Completion>
     </Configuration>
-    <Configuration Name="Release" CompilerType="clang( based on LLVM 3.5.2 )" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+    <Configuration Name="Release" CompilerType="clang( based on LLVM 3.5.2 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g -Wall" C_Options="" Assembler="" Required="no" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
       </Compiler>
@@ -178,4 +179,10 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="test">
+    <VirtualDirectory Name="Schema">
+      <VirtualDirectory Name="Tree"/>
+    </VirtualDirectory>
+    <File Name="test/main.cpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>

@@ -12,21 +12,18 @@
 class Tree
 {
 public:
-
     Tree();
 
     std::shared_ptr<Node> get_root() const;
 
-    std::shared_ptr<Node> find_node( const std::string& name ) const;
-    std::shared_ptr<Node> find_node( const std::string& name, const std::shared_ptr<Node> root_node ) const;
+    std::vector<std::shared_ptr<Node>> find_node( const std::string& name ) const;
+    std::vector<std::shared_ptr<Node>> find_node( const std::string& name, const std::shared_ptr<Node> root_node ) const;
 
     void dump_tree() const;
     void dump_tree( const size_t& counter, const std::shared_ptr<Node> node ) const;
 
 private:
-
     std::shared_ptr<Node> root;
 
-    std::size_t counter;
 };
 

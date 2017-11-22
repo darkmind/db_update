@@ -22,8 +22,8 @@ int main( int ac, char* av[] )
         ("pass", po::value<string>()->default_value(""), "db password")
         ("print_schema", "print schema to output")
         ("check", "run check of schema")
-        ("dump", "dump schema to xml file specified in --source_file option")
-        ("source_file", po::value<string>()->default_value("schema.xml"), "file with xml schema")
+        ("dump", "dump schema to json file specified in --source_file option")
+        ("source_file", po::value<string>()->default_value("schema.json"), "file with json schema")
         ("query", po::value<string>()->default_value(""), "query to run")
         ("table_name", po::value<string>()->default_value(""), "get schema of table");
     po::variables_map vm;
@@ -41,7 +41,7 @@ int main( int ac, char* av[] )
         return 1;
     }
 
-    if ( vm.count("check") && vm.count("dump") ) {
+    if ( vm.count("check") and vm.count("dump") ) {
         cout << "--check and --dump are mutually excluding. Please specify the command" << endl;
         cout << desc << endl;
         return 0;
@@ -52,9 +52,19 @@ int main( int ac, char* av[] )
         {"user", vm["user"].as<string>()},
         {"pass", vm["pass"].as<string>()},
         {"db", vm["db"].as<string>()},
+        {"source_file", vm["source_file"].as<string>()}
     };
 
     Core core{options};
+
+    //core.dump_schema();
+    core.test_method();
+    return 0;
+
+    if ( vm.count("dump") ) {
+        core.dump_schema();
+        cout << "Schema was dumped to " << vm["source_file"].as<string>() << endl;
+    }
 
     if (! vm["query"].as<string>().empty() ) {
         const mysql_rows records = core.execute( vm["query"].as<string>() );

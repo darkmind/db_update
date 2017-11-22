@@ -12,6 +12,7 @@
 class Node
 {
 public:
+
     explicit Node( const std::string& node_name );
     ~Node();
 
@@ -28,16 +29,21 @@ public:
     void set_data( const std::unordered_map<std::string, std::string>& in_data );
     std::unordered_map<std::string, std::string> get_data() const;
 
+    void set_type( const std::string& i_type );
+    std::string get_type() const;
+
     bool has_children() const;
 
 private:
+
     std::string node_name;
+
+    std::string type;
 
     std::weak_ptr<Node> parent;
 
     std::vector<std::shared_ptr<Node>> children;
 
     std::unordered_map<std::string, std::string> data;
-
 };
 
