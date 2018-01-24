@@ -13,7 +13,8 @@ Boost
 ## Building
 
 ```
-$ cmake ./
+$ mkdir build && cd build
+$ cmake ..
 $ make
 ```
 

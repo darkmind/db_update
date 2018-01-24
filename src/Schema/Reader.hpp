@@ -8,7 +8,7 @@
 #include <string>
 #include <memory>
 
-#include "Schema/Tree/Tree.hpp"
+#include "Tree/Tree.hpp"
 
 class Reader
 {
@@ -17,13 +17,13 @@ public:
     Reader();
     ~Reader();
 
-    virtual void read_schema( const std::string& force = "" ) = 0;
+    virtual void read_schema( const std::string& force ) = 0;
 
-    virtual std::shared_ptr<Node> get_table( const std::string& table_name = "" ) = 0;
+    virtual std::shared_ptr<Node> get_table( const std::string& table_name ) = 0;
 
-    virtual std::shared_ptr<Node> get_column( const std::string& table_name = "" ) = 0;
+    virtual std::shared_ptr<Node> get_column( const std::string& table_name ) = 0;
 
-    virtual std::shared_ptr<Node> get_index( const std::string& table_name = "" ) = 0;
+    virtual std::shared_ptr<Node> get_index( const std::string& table_name ) = 0;
 
     virtual mysql_rows execute( const std::string& statement ) const = 0;
 

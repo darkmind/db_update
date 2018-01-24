@@ -57,10 +57,6 @@ int main( int ac, char* av[] )
 
     Core core{options};
 
-    //core.dump_schema();
-    core.test_method();
-    return 0;
-
     if ( vm.count("dump") ) {
         core.dump_schema();
         cout << "Schema was dumped to " << vm["source_file"].as<string>() << endl;

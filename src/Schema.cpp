@@ -3,6 +3,7 @@
 
 #include "Types.hpp"
 #include "Schema.hpp"
+#include "Exceptions.hpp"
 #include "Schema/DB/IO.hpp"
 #include "Schema/File/File_Handler.hpp"
 #include "Schema/Tree/Tree.hpp"
@@ -29,37 +30,55 @@ mysql_rows Schema<READER_T>::execute_direct_sql ( const std::string& statement )
 
 template <class READER_T>
 void Schema<READER_T>::get_table() const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::get_table( const std::string& table_name ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::get_column( const std::string& table_name ) const
-{}
+{
+    throw NotImplementedException();
+}
 template <class READER_T>
 void Schema<READER_T>::get_column( const std::string& table_name, const std::string& column_name ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::get_index( const std::string& table_name ) const
-{}
+{
+    throw NotImplementedException();
+}
 template <class READER_T>
 void Schema<READER_T>::get_index( const std::string& table_name, const std::string& index_name ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::add_table( const std::shared_ptr<Node> table ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::add_column( const std::string& table_name, const std::shared_ptr<Node> column ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::add_index( const std::string& table_name, const std::shared_ptr<Node> index ) const
-{}
+{
+    throw NotImplementedException();
+}
 
 template <class READER_T>
 void Schema<READER_T>::dump_schema() const

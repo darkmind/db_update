@@ -24,8 +24,6 @@ public:
 
     void print_schema() const;
 
-    void test_method();
-
 private:
 
     std::unique_ptr<Schema<IO>> schema_db;

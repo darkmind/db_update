@@ -3,6 +3,7 @@
 
 #include "Types.hpp"
 #include "File_Handler.hpp"
+#include "Exceptions.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -19,13 +20,19 @@ File_Handler::File_Handler( const unordered_map<string, string>& options )
 }
 
 shared_ptr<Node> File_Handler::get_table( const string& table_name )
-{}
+{
+    throw NotImplementedException();
+}
 
 shared_ptr<Node> File_Handler::get_column( const string& table_name )
-{}
+{
+    throw NotImplementedException();
+}
 
 shared_ptr<Node> File_Handler::get_index( const string& table_name )
-{}
+{
+    throw NotImplementedException();
+}
 
 void File_Handler::read_schema( const string& force )
 {

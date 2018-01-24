@@ -36,8 +36,3 @@ void Core::dump_schema() const {
 void Core::print_schema() const {
     schema_db->get_tree()->dump_tree();
 }
-
-void Core::test_method() {
-    schema_file->read_schema();
-    schema_file->get_tree()->dump_tree();
-}
