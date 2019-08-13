@@ -17,18 +17,9 @@ else()
     message( FATAL_ERROR "Incorrect type of build" )
 endif()
 
-#set( CMAKE_CXX_COMPILER "clang++-5.0" )
-set( CMAKE_CXX_COMPILER "g++" )
 set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -Wno-unused-parameter")
-#set( CMAKE_CXX_FLAGS_RELEASE "-O2 -flto")
 set( CMAKE_CXX_FLAGS_RELEASE "-O2")
 set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-
-#set( CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld" )
-#set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-pie -s" )
-set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
-
-set( CMAKE_EXE_LINKER_FLAGS_DEBUG "" )
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
