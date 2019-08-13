@@ -3,5 +3,5 @@ compiler:
   - gcc
   - clang
 before_install:
-  - sudo apt-get install -y build-essential cmake debhelper-compat libboost-program-options-dev libmysqlcppconn-dev txt2man
+  - sudo apt-get install -y build-essential cmake libboost-program-options-dev libmysqlcppconn-dev txt2man
 script: dpkg-buildpackage -rfakeroot -us -uc
