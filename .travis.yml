@@ -4,4 +4,4 @@ compiler:
   - clang
 before_install:
   - sudo apt-get install -y build-essential cmake fakeroot libboost-program-options-dev libmysqlcppconn-dev txt2man
-script: dpkg-buildpackage -rfakeroot -us -uc
+script: travis_helpers/build_deb_package.sh
