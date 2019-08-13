@@ -1,0 +1,21 @@
+Source: db-update
+Section: database
+Priority: optional
+Maintainer: Mykola Malkov <nickolay.malkov@gmail.com>
+Build-Depends:
+ cmake,
+ debhelper-compat (= 12),
+ libboost-program-options-dev,
+ libmysqlcppconn-dev,
+ txt2man,
+Standards-Version: 0.1
+Homepage: https://github.com/darkmind/db_update
+
+Package: db-update
+Architecture: linux-any
+Depends:
+ libboost-program-options-dev,
+ libmysqlcppconn-dev,
+ ${shlibs:Depends}, 
+Description: Tool to check schema consistency according to schema
+ in json file and upgrade it with SQL statements from json file.

@@ -1,0 +1,29 @@
+NAME
+    db_update - check schema consistency according to schema in json file and upgrade it with SQL statements from json file.
+SYNOPSIS
+    db_update [command] [options]
+DESCRIPTION
+    Command:
+      check        - Check current schema against one from json file.
+      dump         - Dump current schema into json file specified in --source_file option.
+      print_schema - Print current schema to output.
+      query        - Run specified SQL query in DB.
+    Options:
+      db          - Name of the schema which is used. Default: test
+      host        - Hostname to connect to. Default: localhost
+      pass        - DB password. Default: ''
+      source_file - Json file with schema to check (for 'check' command) or to write schema (for 'dump' command). Default: schema.json
+      table_name  - Get schema only of specified table. Default: ''
+      user        - DB username. Default: root
+EXAMPLES
+    To create schema file:
+      db_update  --dump --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json
+    Schema is dumped to ~/schema.json
+    Before the update of database schema you can run check to be sure that current schema is equal to the initial one in schema.json file:
+      db_update --check --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json
+BUGS AND LIMITATIONS
+    For now it can't actually update schema.
+AUTHOR
+    Mykola Malkov <nickolay.malkov@gmail.com>
+NOTES
+    GitHub: https://github.com/darkmind/db_update

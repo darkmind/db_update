@@ -7,6 +7,10 @@ if( NOT CMAKE_BUILD_TYPE )
     set( CMAKE_BUILD_TYPE Release )
 endif()
 
+if( CMAKE_BUILD_TYPE STREQUAL None )
+    set( CMAKE_BUILD_TYPE Release )
+endif()
+
 string( TOLOWER "${CMAKE_BUILD_TYPE}" STR_TOLOWER )
 
 if( STR_TOLOWER STREQUAL release )
@@ -17,9 +21,9 @@ else()
     message( FATAL_ERROR "Incorrect type of build" )
 endif()
 
-set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -Wno-unused-parameter")
+set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -Wno-unused-parameter -g")
 set( CMAKE_CXX_FLAGS_RELEASE "-O2")
-set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set( CMAKE_CXX_FLAGS_DEBUG "-O0")
 
 set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

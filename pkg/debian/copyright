@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: DB_Update
+Upstream-Contact: Mykola Malkov <nickolay.malkov@gmail.com>
+Source: hhttps://github.com/darkmind/db_update
+
+Files: *
+Copyright: 2019 Mykola Malkov
+License: GPL-3+
