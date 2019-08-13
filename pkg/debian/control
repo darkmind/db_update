@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Mykola Malkov <nickolay.malkov@gmail.com>
 Build-Depends:
  cmake,
- debhelper-compat (= 12),
+ debhelper-compat (= 11),
  libboost-program-options-dev,
  libmysqlcppconn-dev,
  txt2man,
