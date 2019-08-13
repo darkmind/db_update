@@ -4,4 +4,4 @@ set -euo pipefail
 
 cp -r pkg/debian .
 dpkg-buildpackage -rfakeroot -us -uc
-lintian db-update*.deb
+lintian ../db-update*.deb
