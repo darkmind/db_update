@@ -63,7 +63,7 @@ cmake
 
 Clang 4.0+ / Gcc 6.1+ - compiler
 
-Mysql-Connector-C++] (https://github.com/mysql/mysql-connector-cpp)
+[Mysql-Connector-C++] (https://github.com/mysql/mysql-connector-cpp)
 
 Boost
 
