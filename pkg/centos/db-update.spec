@@ -22,7 +22,6 @@ cmake ./ -DMYSQLCONNECTORCPP_INCLUDE_DIR=/usr/include/mysql-cppconn/jdbc -DDB_UP
 make
 strip db_update
 groff -man -Tascii ../SOURCES/doc/db_update.1 | gzip -c > db_update.1.gz
-ls -la
 
 %install
 mkdir -p %{buildroot}/%{_bindir} %{buildroot}/%{_mandir}/man1
