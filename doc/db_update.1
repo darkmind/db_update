@@ -7,50 +7,49 @@ db_update \- check schema consistency according to schema in json file and upgra
 .SH "SYNOPSIS"
 .B db_update [command] [options]
 .SH "DESCRIPTION"
-.SH "Commands:"
+.SS "Commands:"
 .TP
-\fB\-\-check\fR
+\fB\-\-check\fP
 Check current schema against one from json file.
 .TP
-\fB\-\-dump\fR
+\fB\-\-dump\fP
 Dump current schema into json file specified in --source_file option.
 .TP
-\fB\-\-print_schema\fR
+\fB\-\-print_schema\fP
 Print current schema to output.
 .TP
-\fB\-\-query="..."\fR
+\fB\-\-query="..."\fP
 Run specified SQL query in DB.
+.SS "Options:"
 .TP
-.SH "Options:"
-.TP
-\fB\-\-db\fR
+\fB\-\-db\fP
 Name of the schema which is used. Default: test
 .TP
-\fB\-\-host\fR
+\fB\-\-host\fP
 Hostname to connect to. Default: localhost
 .TP
-\fB\-\-pass\fR
+\fB\-\-pass\fP
 DB password. Default: ''
 .TP
-\fB\-\-source_file\fR
+\fB\-\-source_file\fP
 Json file with schema to check (for 'check' command) or to write schema (for 'dump' command). Default: schema.json
 .TP
-\fB\-\-table_name\fR
+\fB\-\-table_name\fP
 Get schema only of specified table. Default: ''
 .TP
-\fB\-\-user\fR
+\fB\-\-user\fP
 DB username. Default: root
-.TP
 .SH "EXAMPLES"
 .TP
-\fBdb_update --dump --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fR
+\fBdb_update --dump --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fP
 .RS 4
 Create a schema file schema.json of current schema.
 .RE
-.PP
-\fBdb_update --check --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fR
+.TP
+\fBdb_update --check --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fP
 .RS 4
 Before the update of database schema you can run check to be sure that current schema is equal to the initial one in schema.json file
+.RE
 .SH "BUGS AND LIMITATIONS"
 .SS Should you encounter any bugs, they may be reported at: 
 https://github.com/darkmind/db_update/issues
