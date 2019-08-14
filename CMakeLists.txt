@@ -25,7 +25,9 @@ set( CMAKE_CXX_FLAGS "-W -Wall -Wextra -std=c++14 -Wno-unused-parameter -g")
 set( CMAKE_CXX_FLAGS_RELEASE "-O2")
 set( CMAKE_CXX_FLAGS_DEBUG "-O0")
 
-set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+if ( NOT DB_UPDATE_SRC )
+    set(DB_UPDATE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+endif()
 
 find_package( Boost COMPONENTS program_options REQUIRED )
 find_package( Mysql-Connector-C++ REQUIRED )

@@ -4,5 +4,5 @@ compiler:
   - gcc
   - clang
 before_install:
-  - sudo apt-get install -y build-essential cmake debhelper fakeroot libboost-program-options-dev libmysqlcppconn-dev lintian txt2man
+  - sudo apt-get install -y build-essential cmake debhelper fakeroot libboost-program-options-dev libmysqlcppconn-dev lintian
 script: travis_helpers/build_deb_package.sh

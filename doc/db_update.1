@@ -1,0 +1,59 @@
+.\" Man page for db_update.
+.TH DB_UPDATE 1 "14 August 2019" ""
+.\" Please adjust this date when revising the manpage.
+.\"
+.SH "NAME"
+db_update \- check schema consistency according to schema in json file and upgrade it with SQL statements from json file.
+.SH "SYNOPSIS"
+.B db_update [command] [options]
+.SH "DESCRIPTION"
+.SH "Commands:"
+.TP
+\fB\-\-check\fR
+Check current schema against one from json file.
+.TP
+\fB\-\-dump\fR
+Dump current schema into json file specified in --source_file option.
+.TP
+\fB\-\-print_schema\fR
+Print current schema to output.
+.TP
+\fB\-\-query="..."\fR
+Run specified SQL query in DB.
+.TP
+.SH "Options:"
+.TP
+\fB\-\-db\fR
+Name of the schema which is used. Default: test
+.TP
+\fB\-\-host\fR
+Hostname to connect to. Default: localhost
+.TP
+\fB\-\-pass\fR
+DB password. Default: ''
+.TP
+\fB\-\-source_file\fR
+Json file with schema to check (for 'check' command) or to write schema (for 'dump' command). Default: schema.json
+.TP
+\fB\-\-table_name\fR
+Get schema only of specified table. Default: ''
+.TP
+\fB\-\-user\fR
+DB username. Default: root
+.TP
+.SH "EXAMPLES"
+.TP
+\fBdb_update --dump --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fR
+.RS 4
+Create a schema file schema.json of current schema.
+.RE
+.PP
+\fBdb_update --check --host <IP> --user <User> --pass <Password> --db <DB name> --source_file schema.json\fR
+.RS 4
+Before the update of database schema you can run check to be sure that current schema is equal to the initial one in schema.json file
+.SH "BUGS AND LIMITATIONS"
+.SS Should you encounter any bugs, they may be reported at: 
+https://github.com/darkmind/db_update/issues
+.SS For now it can't actually update schema.
+.SH "AUTHORS"
+.SS Mykola Malkov <nickolay.malkov@gmail.com>

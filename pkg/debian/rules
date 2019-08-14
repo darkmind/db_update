@@ -5,7 +5,3 @@
 
 %:
 	dh "$@" --buildsystem=cmake
-
-override_dh_auto_build:
-	txt2man -t DB_UPDATE -s 1 doc/db_update.txt > db_update.1
-	dh_auto_build
